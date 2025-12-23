@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load work_time_tags %}
+
+{% block content %}
+<div class="container-fluid mb-1 pt-2">
+  <div class="border-0 mb-2">
+    <div class="card-header py-1 no-bg bg-transparent header-tabs">
+      <div>
+        <h4 class="fw-bold mb-0">Рабочая неделя</h4>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="white">
+    <div id="table-scroll" class="table-scroll mt-2">
+      <table id="main-table" class="main-table table-sm table">
+        <thead>
+          <tr> 
+            <th scope="col" class="resize-handle">
+              Работник
+            </th>
+            {% for weekday_num, weekday_name in weekends %}
+                <th style="text-align: center; min-width: 40px;">{{ weekday_name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr data-user="{{ user.id }}">
+                    <td style="color:black;">{{ user.last_name }} {{ user.first_name }}</td>
+                    {% for weekday_num, weekday_name in weekends %}
+                        {% get_week_working user_work_times user.id weekday_num as week_working %}
+                        <td class="popoverWeekWorkTimeTarget {{ week_working }}"
+                            data-week="{{ weekday_num }}">
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+{% endblock %}

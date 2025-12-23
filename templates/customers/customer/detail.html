@@ -1,0 +1,29 @@
+<div class="col-12 border-card border-left-green bg-light rounded p-2 mt-3">	
+	<table class="table table-borderless">                         
+	  <tbody>
+	    <tr>
+	      <td class="p-0">
+	          <div class="d-flex flex-column">
+	            <span class="heading d-block">Клиент</span>
+	            <span class="subheadings">{{ customer.full_name }}</span> 
+	          </div>
+	      </td>
+	      <td class="p-0">
+	           <div class="d-flex flex-column">
+	            <span class="heading d-block">Номер телефон</span>
+	            <span class="subheadings">{{ customer.phone_number }}</span>
+	          </div>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+	 <div class="modal-footer justify-content-end p-0">
+	    <button type="button" class="btn-defoult customer-form"
+				data-url="{% url 'customers:customer_update' pk=customer.id %}">
+			Обновить
+		</button>
+		<button type="button" class="customer-delete btn-defoult">
+			Удалить
+		</button>
+	</div>
+</div>

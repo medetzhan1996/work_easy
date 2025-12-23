@@ -1,0 +1,500 @@
+/* Accounting Page Mobile Responsive Styles */
+
+/* General container styles */
+.white {
+    background: #ffffff;
+}
+
+/* Stats cards carousel */
+.carusel_price {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 5px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.carusel_item {
+    flex: 0 0 auto;
+    min-width: 250px;
+}
+
+/* Header tabs section */
+.header-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-tabs > div {
+    flex: 1;
+    min-width: 200px;
+}
+
+.header-tabs form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.header-tabs .input-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Accounting table styles */
+.accountant-table {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 75vh;
+    border: 1px solid #dee2e6;
+    -webkit-overflow-scrolling: touch;
+}
+
+.accountant-table table {
+    width: 100%;
+    min-width: 800px;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+.accountant-table th,
+.accountant-table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+/* Remove sticky positioning for first column */
+.accountant-table thead th:first-child,
+.accountant-table tbody td:first-child,
+.table-scroll thead th:first-child,
+.table-scroll tbody td:first-child {
+    position: relative !important;
+    left: auto !important;
+    z-index: auto !important;
+}
+
+.accountant-table thead th {
+    background: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-weight: 600;
+}
+
+.accountant-table tbody td {
+    background: #ffffff;
+}
+
+.accountant-table tbody tr:hover td {
+    background: #f8f9fa;
+}
+
+/* Form styles */
+.formset {
+    width: 100%;
+    max-width: 100%;
+}
+
+.formset-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.delete-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Breadcrumb responsive */
+.breadcrumb {
+    margin-bottom: 0;
+    background: transparent;
+}
+
+/* Button styles */
+.filters-toggle {
+    white-space: nowrap;
+}
+
+/* Desktop - default styles */
+@media (min-width: 1025px) {
+    .header-tabs {
+        flex-wrap: nowrap;
+    }
+    
+    .header-tabs form {
+        flex-wrap: nowrap;
+    }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .carusel_item {
+        min-width: 220px;
+    }
+
+    .accountant-table {
+        height: 70vh;
+    }
+
+    .accountant-table th,
+    .accountant-table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .header-tabs h4 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Mobile phones (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Stats cards on mobile */
+    .carusel_price {
+        gap: 8px;
+        padding: 5px 0;
+    }
+
+    .carusel_item {
+        min-width: 200px;
+    }
+
+    .carusel_item .alert {
+        padding: 8px !important;
+    }
+
+    .carusel_item .h6 {
+        font-size: 0.875rem;
+    }
+
+    .carusel_item .avatar {
+        width: 35px;
+        height: 35px;
+    }
+
+    .carusel_item .avatar i {
+        font-size: 1rem;
+    }
+
+    /* Header section */
+    .header-tabs {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .header-tabs > div {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .header-tabs h4 {
+        font-size: 1.125rem;
+        margin-bottom: 10px;
+    }
+
+    .header-tabs form {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .header-tabs .input-group {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .header-tabs .input-group-text {
+        min-width: 40px;
+        font-size: 0.875rem;
+        padding: 10px 8px;
+    }
+
+    .header-tabs .dropdown {
+        width: 100%;
+    }
+
+    .header-tabs .dropdown .btn {
+        width: 100%;
+    }
+
+    /* Table adjustments for mobile */
+    .accountant-table {
+        height: 65vh;
+        border: none;
+    }
+
+    .accountant-table table {
+        min-width: 700px;
+    }
+
+    .accountant-table th,
+    .accountant-table td {
+        padding: 8px 6px;
+        font-size: 0.875rem;
+    }
+
+    .accountant-table thead th {
+        font-size: 0.875rem;
+        padding: 8px 6px;
+        position: relative; /* Remove sticky positioning on mobile */
+        top: auto;
+    }
+
+    /* Make date inputs full width on mobile */
+    .form-control,
+    .form-select {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        padding: 10px;
+        min-height: 44px; /* Touch-friendly */
+    }
+
+    /* Dropdown menu on mobile */
+    .dropdown-menu {
+        width: 100%;
+        font-size: 0.9375rem;
+    }
+
+    .dropdown-item {
+        padding: 12px 16px; /* Touch-friendly */
+    }
+
+    /* Container padding */
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Form page adjustments */
+    .formset {
+        padding: 0;
+    }
+
+    .card-dashboard-one {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .label-title {
+        font-size: 0.875rem;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Formset forms */
+    .formset-form {
+        margin-bottom: 15px;
+    }
+
+    .formset-form .col-md-1,
+    .formset-form .col-md-5,
+    .formset-form .col-md-6 {
+        width: 100%;
+        padding: 0;
+        margin-bottom: 10px;
+    }
+
+    .formset-form .delete-content {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    /* Modal footer buttons */
+    .modal-footer.fotter-btn,
+    .fotter-btn {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-footer .btn,
+    .fotter-btn .btn {
+        width: 100%;
+        min-height: 44px;
+        font-size: 1rem;
+    }
+
+    /* Breadcrumb on mobile */
+    .breadcrumb {
+        padding: 8px 10px;
+        font-size: 0.875rem;
+    }
+
+    .breadcrumb-item {
+        font-size: 0.875rem;
+    }
+
+    /* Add form button */
+    .add-inline-form {
+        width: 100%;
+        min-height: 44px;
+    }
+}
+
+/* Extra small devices (phones in portrait mode, max-width: 576px) */
+@media (max-width: 576px) {
+    /* Even more compact stats */
+    .carusel_item {
+        min-width: 180px;
+    }
+
+    .carusel_item .alert {
+        padding: 6px !important;
+    }
+
+    .carusel_item .h6 {
+        font-size: 0.75rem;
+    }
+
+    .carusel_item .avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    .carusel_item .avatar i {
+        font-size: 0.875rem;
+    }
+
+    /* Header */
+    .header-tabs h4 {
+        font-size: 1rem;
+    }
+
+    .header-tabs .input-group-text {
+        min-width: 35px;
+        font-size: 0.8125rem;
+        padding: 10px 6px;
+    }
+
+    /* Table */
+    .accountant-table {
+        height: 60vh;
+    }
+
+    .accountant-table table {
+        min-width: 600px;
+    }
+
+    .accountant-table th,
+    .accountant-table td {
+        padding: 6px 4px;
+        font-size: 0.8125rem;
+    }
+
+    /* Container padding */
+    .container-fluid {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    /* Form adjustments */
+    .card-body {
+        padding: 10px;
+    }
+
+    .label-title {
+        font-size: 0.8125rem;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        padding: 6px 8px;
+        font-size: 0.8125rem;
+    }
+
+    /* Row adjustments */
+    .row .col-md-4,
+    .row .col-md-6,
+    .row .col-md-8 {
+        width: 100%;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .accountant-table {
+        height: 55vh;
+    }
+
+    /* Hide stats cards on landscape to save space */
+    .carusel_price {
+        display: none;
+    }
+
+    /* Reduce header size */
+    .header-tabs h4 {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+}
+
+/* Touch devices - increase touch targets */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    button,
+    .dropdown-toggle {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Prevent zoom on input focus for iOS */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Larger touch targets for links */
+    a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .dropdown-item {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Print styles */
+@media print {
+    .header-tabs form,
+    .header-tabs .dropdown,
+    .breadcrumb {
+        display: none;
+    }
+
+    .accountant-table {
+        height: auto;
+        overflow: visible;
+    }
+
+    .accountant-table table {
+        page-break-inside: auto;
+    }
+
+    .accountant-table tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+}
+

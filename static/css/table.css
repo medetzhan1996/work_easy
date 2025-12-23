@@ -1,0 +1,82 @@
+@font-face {
+  font-family: "Times_New_Roman"; /* Название вашего шрифта */
+  src: url("ofont.ru_Times New Roman.ttf") format("truetype"); /* Путь к вашему файлу шрифта */
+}
+
+  html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+.intro {
+  max-width: 1280px;
+  margin: 1em auto;
+}
+.table-scroll {
+  position: relative;
+  width:100%;
+  z-index: 1;
+  margin: auto;
+  overflow: auto;
+  height: 90vh;
+}
+.table-scroll table {
+  width: 100%;
+  min-width: 1280px;
+   width: max-content;
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: "Times_New_Roman";
+}
+.table-wrap {
+  position: relative;
+}
+.table-scroll th,
+.table-scroll td {
+  max-width: 300px;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  vertical-align: top;
+}
+.table-scroll thead th {
+  background: #eee;
+  color: #333;
+  position: -webkit-sticky;
+  position: sticky;
+  font-weight: 400;
+  top: 0;
+}
+/* safari and ios need the tfoot itself to be position:sticky also */
+.table-scroll tfoot,
+.table-scroll tfoot th,
+.table-scroll tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background: #eee;
+  color: #333;
+  font-weight: 400;
+  z-index:4;
+}
+
+a:focus {
+  background: red;
+} /* testing links*/
+
+th:first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  font-weight: 400;
+  background: #ccc;
+}
+thead th:first-child,
+tfoot th:first-child {
+  z-index: 5;
+}

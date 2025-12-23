@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load accounting_tags %}
+{% load account_tags %}
+{% load warehouse_tags %}
+{% block content %}
+<div class="container-fluid">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb p-2">
+        <li class="breadcrumb-item"><a href="{% url 'warehouse:storage_operation_list' %}">Складские операции</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Приход товара</li>
+    </ol>
+  </nav>
+</div>
+<div class="white">
+    <div class="card mb-3">
+      <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+          <h6 class="m-0 fw-bold">Приход товара</h6>
+      </div>
+      <div class="card-body">
+        <form>{% csrf_token %}
+          <div class="mb-2 row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Вид операции</label>
+            <div class="col-sm-10">
+                {{ form.operation_method|add_class:"form-select" }}
+            </div>
+          </div>
+          <div class="mb-2 row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Склад</label>
+            <div class="col-sm-10">
+               {{ form.storage|add_class:"form-control" }}
+            </div>
+          </div>
+          <div class="mb-2 row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Комментарий</label>
+            <div class="col-sm-10">
+               {{ form.description|add_class:"form-control" }}
+            </div>
+          </div>
+          <div class="reset-block">
+            <div class="filter-title">
+                <h6 class="fw-bold">Список товаров</h6>
+            </div>
+            <div class="filter-btn">
+                <a class="btn btn-primary btn-sm add-inline-selectize-form" href="#" style="border-radius: 0;">+ Добавить товар</a>
+            </div>
+          </div>
+          <div>
+            <table class="mobile">
+              <thead>
+                <tr>
+                  <th scope="col" style="text-align:left"> Выберите продукт / материал</th>
+                  <th scope="col" style="text-align:left">Количество, шт</th>
+                  <th scope="col" style="width:60px">+ / -</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    {% for formset_form in storage_operation_detail_formset %}
+                        {% get_object_by_content_type formset_form.content_type.value formset_form.object_id.value as my_object %}
+                        
+                      <td data-label="Метод оплаты / списания">
+                        {{ formset_form.id }}
+                        <select class="form-select product-selectize">
+                            {% if my_object %}
+                                <option value="{{ formset_form.object_id.value }}_{{ formset_form.content_type.value }}">
+                                    {{ my_object }}
+                                </option>
+                            {% endif %}
+                        </select>
+                        <!-- {{ formset_form.content_type|add_class:"content_type d-none" }}
+                        {{ formset_form.object_id|add_class:"object_id d-none" }} -->
+                      </td>
+                      <td data-label="Сумма, тг">
+                        {{ formset_form.quantity|add_class:"form-control" }}
+                      </td>
+                      <td data-label="+ / -">{{formset_form.DELETE}}
+                        <button class="btn btn-default"><i class="bi bi-trash"></i></button>
+                      </td>
+                   {% endfor %}
+                </tr>
+                <tr class="empty-form d-none">
+                    <td data-label="Account">
+                        <select class="form-control selectize-element"
+                            data-url="/products/products_materials/search/"
+                            data-value="id"
+                            data-label="title"
+                            data-search="title"
+                            data-placeholder="Поиск товара"
+                        >
+                        </select>
+                        {{storage_operation_detail_formset.empty_form.content_type|add_class:"content_type  d-none"}}
+                        {{ storage_operation_detail_formset.empty_form.object_id|add_class:"object_id d-none" }}
+                    </td>
+                    <td data-label="Due Date">
+                        {{storage_operation_detail_formset.empty_form.quantity|add_class:"form-control"}}
+                    </td>
+                    <td data-label="Amount">
+                        {{storage_operation_detail_formset.empty_form.DELETE}}
+                        <button class="btn btn-default"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer fotter-btn mt-3">
+              <input type="submit" class="btn btn-success  rounded-0" value="Сохранить">
+          </div>
+        </form>
+      </div>
+    </div>
+</div><!-- 
+        <div class="row">
+            <div class="col-md-8 formset">
+                <div class="card card-dashboard-one ">
+
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {% if related_object|class_name == 'salary' %}
+                            <div class="mt-2">
+                                Работник: {{ related_object.user.full_name }} <br>
+                                Оплачиваемая зп: {{ related_object.total_amount }} тг <br>
+                                <input type="hidden" name="object_id" value="related_object.user.id">
+                            </div>
+                        {% elif request.GET.operation_method == 'PREPAID_EXPENSE' %}
+                            {% user_dropdown name='object_id' user=request.user %}
+                            <input type="hidden" name="content_type" value="{{ user_ct.id }}">
+                        {% endif %}
+                        {{ form.content_type|add_class:"d-none" }}
+
+                        {{ storage_operation_detail_formset.management_form }}
+                        <div class="card-body mt-2">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="label-title">Вид операции:</label>
+                                    {{ form.operation_method|add_class:"form-control" }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="label-title">Склад:</label>
+                                    {{ form.storage|add_class:"form-control" }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label  class="label-title">Комментарий:</label>
+                                    {{ form.description|add_class:"form-control" }}
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                                <div class="flex-title">
+                                    <h5>Список товаров</h5>
+                                </div>
+                                <div class="flex-btn">
+                                    <button type="button" class="btn btn-primary btn-sm add-inline-selectize-form">+ Добавить товар</button>
+                                </div>
+                            </div>
+
+                                <div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            Выберите продукт / материал
+                                        </div>
+                                        <div class="col-md-5">
+                                            Количество, шт
+                                        </div>
+                                        <div class="col-md-1">
+                                            + / -
+                                        </div>
+                                    </div>
+                                    <div class="formset-forms">
+                                        {% for formset_form in storage_operation_detail_formset %}
+                                            {% get_object_by_content_type formset_form.content_type.value formset_form.object_id.value as my_object %}
+                                            <div class="formset-form row mb-3">
+                                                <div class="col-md-6">
+                                                    {{ formset_form.id }}
+                                                    <select class="form-control product-selectize">
+                                                        {% if my_object %}
+                                                            <option value="{{ formset_form.object_id.value }}_{{ formset_form.content_type.value }}">
+                                                                {{ my_object }}
+                                                            </option>
+                                                        {% endif %}
+                                                    </select>
+                                                    {{ formset_form.content_type|add_class:"content_type d-none" }}
+                                                    {{ formset_form.object_id|add_class:"object_id d-none" }}
+
+                                                </div>
+                                                <div class="col-md-5">
+                                                    {{ formset_form.quantity|add_class:"form-control" }}
+                                                </div>
+                                                <div class="col-md-1 delete-content">
+                                                    {{formset_form.DELETE}}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="empty-form d-none row mb-3">
+                                    <div class="col-md-6">
+                                        <select class="form-control selectize-element"
+                                            data-url="/products/products_materials/search/"
+                                            data-value="id"
+                                            data-label="title"
+                                            data-search="title"
+                                            data-placeholder="Поиск товара"
+                                        >
+                                        </select>
+                                        {{storage_operation_detail_formset.empty_form.content_type|add_class:"content_type  d-none"}}
+                                        {{ storage_operation_detail_formset.empty_form.object_id|add_class:"object_id d-none" }}
+                                    </div>
+                                    <div class="col-md-5">
+                                        {{storage_operation_detail_formset.empty_form.quantity|add_class:"form-control"}}
+                                    </div>
+                                    <div class="col-md-1 delete-content">
+                                        {{storage_operation_detail_formset.empty_form.DELETE}}
+                                    </div>
+                                </div>
+                                <div class="modal-footer fotter-btn pb-5">
+                                    <button type="button" class="btn btn-default back-schedule mr-3">Отмена</button>
+                                    <input type="submit" class="btn btn-success  rounded-0" value="Сохранить">
+                                </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> -->
+{% endblock %}

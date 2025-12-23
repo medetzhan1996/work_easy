@@ -1,0 +1,51 @@
+{% load widget_tweaks %}
+{% load dynamic_forms_tags %}
+{% load dynamic_forms_filters %}
+{% if  form_field|has_full_permission:user_type %}
+    {% if form_field.field_type == 'inline_field' %}
+        {% if form_field.name == 'customer_full_name' %}
+            {{ customer_form.full_name|add_class:"form-control" }}
+        {% elif form_field.name == 'customer_phone_number' %}
+            {{ customer_form.phone_number|add_class:"form-control" }}
+        {% elif form_field.name == 'product' %}
+            {{ order_form.product|add_class:"form-control select2" }}
+        {% elif form_field.name == 'product_price' %}
+            {{ order_form.price|add_class:"form-control product_price" }}
+        {% elif form_field.name == 'deadline' %}
+            {{ order_form.deadline|attr:"type:date"|add_class:"form-control" }}
+        {% elif form_field.name == 'master' %}
+            {{ order_form.master|add_class:"form-control" }}
+        {% elif form_field.name == 'salesman' %}
+            {{ order_form.salesman|add_class:"form-control" }}
+        {% endif %}
+    {% else %}
+        {% if form_field.field_type == 'datalist' %}
+            <input type="text" name="{{ form_field.name }}" class="form-control" list="data_list_{{ form_field.name }}" autocomplete="off" id="id_{{ form_field.name }}">
+            <datalist id="data_list_{{ form_field.name }}">
+                {% for choice in form_field.choices %}
+                    <option value="{{ choice }}">
+                {% endfor %}
+            </datalist>
+        {% elif form_field.field_type == 'payment_confirmation' %}
+            {{ dynamic_form|get_form_field:form_field.name|add_class:"form-check-input" }}
+        {% elif form_field.field_type == 'payment' or form_field.field_type == 'number' %}
+            {{ dynamic_form|get_form_field:form_field.name|add_class:"form-control"|attr:"type:number"|attr:"step:any" }}
+        {% else %}
+            {{ dynamic_form|get_form_field:form_field.name }}
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% if form_field.field_type == 'discounted_amount' %}
+        <span class="discounted_amount-content"></span>
+    {% elif form_field.field_type == 'total_payment' %}
+        <span class="total_payment-content"></span>
+    {% elif form_field.field_type == 'remainder' %}
+        <span class="remainder-content"></span>
+    {% elif form_field.field_type == 'payment_after_commission' %}
+        <span class="payment_after_commission-{{form_field.name}}-content"
+              data-associated="{{ form_field.associated_field.name }}">
+        </span>
+    {% elif form_field.name == 'salesman' %}
+        {{ order_form.salesman|add_class:"form-control" }}
+    {% endif %}
+{% endif %}

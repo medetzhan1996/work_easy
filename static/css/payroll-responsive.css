@@ -1,0 +1,447 @@
+/* Payroll (Salary & Penalty) Page Mobile Responsive Styles */
+
+/* General container styles */
+.white {
+    background: #ffffff;
+}
+
+/* Filter section */
+.filter-2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
+    background: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.filter-2 > div,
+.filter-2 > form {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-2 .input-group {
+    display: flex;
+}
+
+.filter-2 .input-group input {
+    flex: 1;
+}
+
+/* Nav pills (tabs) */
+.nav-pills {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.nav-pills .nav-link {
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+}
+
+/* Table styles */
+.table-scroll {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 75vh;
+    border: 1px solid #dee2e6;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+    width: 100%;
+    min-width: 1200px;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+.table-scroll th,
+.table-scroll td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.table-scroll thead th {
+    background: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-weight: 600;
+}
+
+.table-scroll tbody td {
+    background: #ffffff;
+}
+
+.table-scroll tbody tr:hover td {
+    background: #f8f9fa;
+}
+
+/* Form inside table cells */
+.table-scroll .form-control {
+    min-width: 120px;
+    font-size: 0.875rem;
+}
+
+/* Breadcrumb responsive */
+.breadcrumb {
+    margin-bottom: 0;
+    background: transparent;
+}
+
+/* Card styles for forms */
+.card {
+    border-radius: 0.25rem;
+}
+
+.card-header {
+    background: #f8f9fa;
+}
+
+/* Form labels */
+.col-form-label {
+    font-weight: 500;
+}
+
+/* Desktop - default styles */
+@media (min-width: 1025px) {
+    .filter-2 {
+        flex-wrap: nowrap;
+    }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .table-scroll {
+        height: 70vh;
+    }
+
+    .table-scroll th,
+    .table-scroll td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .nav-pills .nav-link {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile phones (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Header section */
+    .header-tabs {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .header-tabs > div {
+        width: 100%;
+    }
+
+    .header-tabs h4 {
+        font-size: 1.125rem;
+        margin-bottom: 10px;
+    }
+
+    /* Nav pills - stack vertically on mobile */
+    .nav-pills {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .nav-pills .nav-link {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem 1rem;
+        font-size: 0.9375rem;
+        white-space: normal;
+    }
+
+    /* Filter section */
+    .filter-2 {
+        flex-direction: column;
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .filter-2 > div,
+    .filter-2 > form {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .filter-2 .input-group {
+        width: 100%;
+    }
+
+    .filter-2 .input-group input {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        min-height: 44px;
+    }
+
+    .filter-2 .btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Table adjustments for mobile */
+    .table-scroll {
+        height: 65vh;
+        border: none;
+    }
+
+    .table-scroll table {
+        min-width: 1000px;
+    }
+
+    .table-scroll th,
+    .table-scroll td {
+        padding: 8px 6px;
+        font-size: 0.875rem;
+    }
+
+    .table-scroll thead th {
+        font-size: 0.875rem;
+        padding: 8px 6px;
+        position: relative; /* Remove sticky positioning on mobile */
+        top: auto;
+    }
+
+    .table-scroll .form-control {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        min-height: 40px;
+    }
+
+    /* Container padding */
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Card adjustments */
+    .card {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-header h6 {
+        font-size: 1rem;
+    }
+
+    /* Form adjustments */
+    .mb-2.row {
+        margin-bottom: 1rem !important;
+    }
+
+    .col-sm-2,
+    .col-sm-10 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .col-form-label {
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.25rem;
+        font-size: 0.875rem;
+    }
+
+    .form-control {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        padding: 10px;
+        min-height: 44px;
+    }
+
+    /* Modal footer buttons */
+    .modal-footer.fotter-btn,
+    .fotter-btn {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-footer .btn,
+    .fotter-btn .btn {
+        width: 100%;
+        min-height: 44px;
+        font-size: 1rem;
+    }
+
+    /* Breadcrumb on mobile */
+    .breadcrumb {
+        padding: 8px 10px;
+        font-size: 0.875rem;
+    }
+
+    .breadcrumb-item {
+        font-size: 0.875rem;
+    }
+
+    /* Button adjustments */
+    .btn {
+        font-size: 0.9375rem;
+    }
+
+    .header-tabs .btn {
+        width: 100%;
+        min-height: 44px;
+    }
+}
+
+/* Extra small devices (phones in portrait mode, max-width: 576px) */
+@media (max-width: 576px) {
+    /* Header */
+    .header-tabs h4 {
+        font-size: 1rem;
+    }
+
+    /* Nav pills */
+    .nav-pills .nav-link {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.875rem;
+    }
+
+    /* Filter section */
+    .filter-2 {
+        padding: 8px;
+        gap: 10px;
+    }
+
+    /* Table */
+    .table-scroll {
+        height: 60vh;
+    }
+
+    .table-scroll table {
+        min-width: 900px;
+    }
+
+    .table-scroll th,
+    .table-scroll td {
+        padding: 6px 4px;
+        font-size: 0.8125rem;
+    }
+
+    /* Container padding */
+    .container-fluid {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    /* Card adjustments */
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-header h6 {
+        font-size: 0.9375rem;
+    }
+
+    /* Form adjustments */
+    .col-form-label {
+        font-size: 0.8125rem;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+        padding: 6px 8px;
+        font-size: 0.8125rem;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .table-scroll {
+        height: 55vh;
+    }
+
+    /* Reduce header size */
+    .header-tabs h4 {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    /* Compact nav pills */
+    .nav-pills .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    /* Compact filter */
+    .filter-2 {
+        padding: 8px;
+        gap: 8px;
+    }
+}
+
+/* Touch devices - increase touch targets */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Prevent zoom on input focus for iOS */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Larger touch targets for links */
+    a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.5rem;
+    }
+
+    /* Nav pills touch-friendly */
+    .nav-pills .nav-link {
+        min-height: 44px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .filter-2,
+    .nav-pills,
+    .breadcrumb {
+        display: none;
+    }
+
+    .table-scroll {
+        height: auto;
+        overflow: visible;
+    }
+
+    .table-scroll table {
+        page-break-inside: auto;
+    }
+
+    .table-scroll tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    .btn,
+    .form-control {
+        display: none;
+    }
+}
+
+

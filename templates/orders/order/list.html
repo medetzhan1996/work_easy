@@ -1,0 +1,537 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% load dynamic_forms_tags %}
+{% load dynamic_forms_filters %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/excel-table.css' %}">
+{% endblock %}
+
+{% block content %}
+{% if request.user.user_type == 3 or request.user.user_type == 2 %}
+<div class="container-fluid mb-1 pt-2">
+  <div class="row g-3 mb-2 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-6">
+    <div class="col">
+        <div class="alert-success alert mb-0 p-l">
+            <div class="d-flex align-items-center">
+                <div class="avatar rounded no-thumbnail bg-success text-light">
+                  <i class="bi bi-coin"></i>
+                </div>
+                <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">План: {{ plan_for_month }} тг</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert-danger alert mb-0 p-l">
+            <div class="d-flex align-items-center">
+                <div class="avatar rounded no-thumbnail bg-danger text-light">
+                  <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Выполнен: {{ total_sum }} тг</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert-info alert mb-0 p-l">
+            <div class="d-flex align-items-center">
+                <div class="avatar rounded no-thumbnail bg-info text-light">
+                  <i class="bi bi-credit-card-2-back"></i>
+                </div>
+                <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Остаток: {{ remainder_plan }} тг</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="alert-info alert mb-0 p-l">
+            <div class="d-flex align-items-center">
+                <div class="avatar rounded no-thumbnail bg-info text-light">
+                  <i class="bi bi-credit-card-2-back"></i>
+                </div>
+                <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Количество: {{ order_count }} тг</div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="white">
+    <div class="container-fluid mb-1 pt-2">
+      <div class="border-0 mb-2">
+        <div class="card-header py-1 no-bg bg-transparent header-tabs">
+          <div class="d-flex align-items-center justify-content-between w-100">
+            <div class="d-flex align-items-center gap-3">
+              <h4 class="fw-bold mb-0">Список заказов</h4>
+              <!-- Column visibility controls -->
+              <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="columnVisibilityBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-layout-three-columns"></i> Управление столбцами
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-columns" aria-labelledby="columnVisibilityBtn" id="columnVisibilityMenu">
+                      <li><h6 class="dropdown-header"><i class="bi bi-eye"></i>&nbsp;&nbsp;Видимость столбцов</h6></li>
+                      <li><hr class="dropdown-divider"></li>
+                      {% for form_field in form_fields %}
+                      <li>
+                          <div class="dropdown-item column-toggle-item">
+                              <input type="checkbox" class="form-check-input column-visibility-toggle" 
+                                     id="col-{{ form_field.name }}" 
+                                     data-field="{{ form_field.name }}" 
+                                     checked>
+                              <label class="form-check-label" for="col-{{ form_field.name }}">
+                                  {{ form_field.label|safe|striptags }}
+                              </label>
+                          </div>
+                      </li>
+                      {% endfor %}
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                          <a class="dropdown-item text-primary" href="#" id="showAllColumns">
+                              <i class="bi bi-eye-fill"></i>&nbsp;&nbsp;Показать все
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <form action="" class="myForm" method="get" id="myForm">
+                <div class="input-group">
+                   {{ orders_filter.form.create_date_month|add_class:"change-submitted form-control"|attr:"type:month" }}
+                </div>
+              </form>
+              {% if request.user.allowed_add %}
+              <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#orderCreateModal" title="Добавить заказ">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="table-scroll" class="table-scroll mt-2 excel-container">
+        <table id="main-table" class="excel-table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="text-align: center; min-width: 50px; width: 50px;">
+                          #
+                        </th>
+                        {% for form_field in form_fields %}
+                            <th scope="col" class="resize-handle {{ form_field.classes }}"
+                                style="text-align: center; min-width: 150px; {{ form_field.styles }}">
+                                <div class="excel-header-content">
+                                    <span class="header-label">{{ form_field.label|safe }}</span>
+                                    <div class="dropdown header-dropdown">
+                                        <button class="header-dropdown-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-chevron-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><h6 class="dropdown-header"><i class="bi bi-funnel"></i>&nbsp;&nbsp;Действия</h6></li>
+                                            <li><a class="dropdown-item sort-asc" href="#" data-field="{{ form_field.name }}">
+                                                <i class="bi bi-sort-alpha-down"></i>&nbsp;&nbsp;Сортировать А → Я
+                                            </a></li>
+                                            <li><a class="dropdown-item sort-desc" href="#" data-field="{{ form_field.name }}">
+                                                <i class="bi bi-sort-alpha-down-alt"></i>&nbsp;&nbsp;Сортировать Я → А
+                                            </a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item filter-column" href="#" data-field="{{ form_field.name }}">
+                                                <i class="bi bi-funnel"></i>&nbsp;&nbsp;Фильтр
+                                            </a></li>
+                                            <li><a class="dropdown-item clear-filter" href="#" data-field="{{ form_field.name }}">
+                                                <i class="bi bi-x-circle"></i>&nbsp;&nbsp;Очистить фильтр
+                                            </a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item hide-column" href="#" data-field="{{ form_field.name }}">
+                                                <i class="bi bi-eye-slash"></i>&nbsp;&nbsp;Скрыть столбец
+                                            </a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for order in orders_filter.qs %}
+                        <tr data-id="{{ order.id }}">
+                            <td>
+                              <div class="d-flex align-items-center justify-content-center gap-2 position-relative">
+                                <span class="row-number">{{ forloop.counter }}</span>
+                                <button class="btn btn-sm p-0 border-0 bg-transparent" 
+                                        type="button" 
+                                        data-bs-toggle="dropdown" 
+                                        aria-expanded="false"
+                                        style="line-height: 1;">
+                                  <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-actions">
+                                  <li><h6 class="dropdown-header"><i class="bi bi-info-circle"></i>&nbsp;&nbsp;Действия</h6></li>
+                                  <li>
+                                      <a class="dropdown-item delete-order" href="#" data-id="{{ order.id }}">
+                                        <i class="bi bi-trash"></i>&nbsp;&nbsp;Удалить
+                                      </a>
+                                  </li>
+<!--                                  <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i>&nbsp;&nbsp;Изменить</a></li>-->
+                                </ul>
+                              </div>
+                            </td>
+                            {% for form_field in form_fields %}
+                                <td data-label="{{ form_field.label }}"  tabindex="0"
+                                    class="{{ form_field.classes }}"
+                                    style="{{ form_field.styles }}">
+                                    {% if form_field.name == 'customer_full_name' %}
+                                        <span>{{ order.customer }}</span>
+                                    {% elif form_field.name == 'customer_phone_number' %}
+                                        <span>{{ order.customer.phone_number }}</span>
+                                    {% elif form_field.name == 'product' %}
+                                        {% if form_field|has_full_permission:user_type %}
+                                            <span class="span-select-field" data-id="#id_{{ form_field.name }}"
+                                                data-val="{{ order.product.id }}">
+                                                {{ order.product.title }}
+                                            </span>
+                                            <div class="d-none">
+                                                <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none form-control select2"
+                                                        {% if blocking_field %} disabled {% endif %}>
+                                                </select>
+                                            </div>
+                                        {% else %}
+                                            {{ order.product }}
+                                        {% endif %}
+                                    {% elif form_field.name == 'product_price' %}
+                                        <input type="number" name="price" value="{{ order.price }}"
+                                           class="d-none input-field product_price">
+                                        {% if order.price %}
+                                            <span class="span-field">{{ order.price }}</span>
+                                        {% else %}
+                                            <span class="span-field">.........</span>
+                                        {% endif %}
+                                    {% elif form_field.name == 'deadline' %}
+                                        {% if not form_field|has_full_permission:user_type %}
+                                            <span>{{ order.deadline|date:"d.m.Y" }}</span>
+                                        {% else %}
+                                            <input type="date" name="deadline" value="{{ order.deadline|date:"Y-m-d" }}" class="date-field d-none">
+                                            <span class="span-field">{{ order.deadline|date:"d.m.Y" }}</span>
+                                        {% endif %}
+
+                                    {% elif form_field.name == 'master' %}
+                                        {% if form_field|has_full_permission:user_type %}
+                                            <span class="span-select-field" data-id="#id_{{ form_field.name }}"
+                                                data-val="{{ order.master.id }}">
+                                                {{ order.master|default_if_none:"---------" }}
+                                            </span>
+                                            <div class="d-none">
+                                                <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none form-control select2"
+                                                        {% if blocking_field %} disabled {% endif %}>
+                                                </select>
+                                            </div>
+                                        {% else %}
+                                            {{ order.master }}
+                                        {% endif %}
+                                    {% elif form_field.name == 'salesman' %}
+                                        {% if form_field|has_full_permission:user_type %}
+                                            <span class="span-select-field" data-id="#id_{{ form_field.name }}"
+                                                data-val="{{ order.salesman.id }}">
+                                                {{ order.salesman|default_if_none:"---------" }}
+                                            </span>
+                                            <div class="d-none">
+                                                <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none form-control select2"
+                                                        {% if blocking_field %} disabled {% endif %}>
+                                                </select>
+                                            </div>
+                                        {% else %}
+                                            {{ order.salesman }}
+                                        {% endif %}
+                                    {% else %}
+                                        {% get_item order.extra_data form_field.name as form_field_val %}
+                                        {% check_blocking_field order.extra_data form_field.associated_blocking_field.name as blocking_field %}
+                                        {% if not form_field|has_full_permission:user_type %}
+                                            {% if form_field.field_type == 'checkbox' or form_field.field_type == 'payment_confirmation' %}
+                                                {% if order.extra_data|is_checked:form_field.name %}
+                                                    <span>&#10003;</span>
+                                                {% else %}
+                                                    <span>&#10007;</span>
+                                                {% endif %}
+                                            {% elif form_field.field_type == 'discounted_amount' %}
+                                                <span class="discounted_amount-content">{{ order.discount_payment }}</span>
+                                            {% elif form_field.field_type == 'total_payment' %}
+                                                <span class="total_payment-content">{{ order.total_payment }}</span>
+                                            {% elif form_field.field_type == 'remainder' %}
+                                                <span class="remainder-content">{{ order.remainder }}</span>
+                                            {% elif form_field.field_type == 'payment_after_commission' %}
+                                                <span class="payment_after_commission-{{form_field.name}}-content"
+                                                      data-associated="{{ form_field.associated_field.name }}">
+                                                    {% calculate_price_after_commission form_field order.extra_data last_date %}
+                                                </span>
+                                            {% elif form_field.field_type == 'receipt_amount' %}
+                                                {{ order.total_receipt_amount }}
+                                            {% elif form_field.field_type == 'material_by_category' or form_field.field_type == 'payment_method' or form_field.field_type == 'bank' %}
+                                                {% with form_field_val=form_field_val|default:"" %}
+                                                    {% from_json form_field_val as form_field_val_json %}
+                                                    {{ form_field_val_json.label }}
+                                                {% endwith %}
+                                            {% else %}
+                                                {{ form_field_val }}
+                                            {% endif %}
+
+                                        {% elif form_field.field_type == 'material_by_category' %}
+                                            {% with form_field_val=form_field_val|default:"" %}
+                                                {% from_json form_field_val as form_field_val_json %}
+                                                {% if not form_field|has_full_permission:user_type or blocking_field  %}
+                                                    {{ form_field_val_json.label }}
+                                                {% else %}
+                                                    <span class="span-select-id-field" data-id="#id_{{ form_field.name }}" data-val="{{ form_field_val_json.id }}">
+                                                        {{ form_field_val_json.label }}
+                                                    </span>
+                                                    <div class="d-none">
+                                                        <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none form-control select2"
+                                                                {% if blocking_field %} disabled {% endif %}
+                                                                aria-label="Select option for {{ form_field.name }}"
+                                                        >
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% elif form_field.field_type == 'number' %}
+                                            {% if blocking_field %}
+                                                {{ form_field_val }}
+                                            {% else %}
+                                                <input type="number" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                   class="d-none input-field"  step="any" >
+                                                {% if form_field_val %}
+                                                    <span class="span-field">{{ form_field_val }}</span>
+                                                {% else %}
+                                                    <span class="span-field">.........</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'accepting_payment' %}
+                                            {% if blocking_field %}
+                                                {{ form_field_val }}
+                                            {% else %}
+                                                <input type="number" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                   class="d-none input-field accepting_payment"  step="any"
+                                                    data-associated="{{ form_field.associated_field.name }}">
+                                                {% if form_field_val %}
+                                                    <span class="span-field">{{ form_field_val }}</span>
+                                                {% else %}
+                                                    <span class="span-field">.........</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'surcharge' %}
+                                            {% if blocking_field %}
+                                                {{ form_field_val }}
+                                            {% else %}
+                                                <input type="number" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                   class="d-none input-field surcharge"  step="any" >
+                                                {% if form_field_val %}
+                                                    <span class="span-field">{{ form_field_val }}</span>
+                                                {% else %}
+                                                    <span class="span-field">.........</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'discount' %}
+                                            {% if blocking_field %}
+                                                {{ form_field_val }}
+                                            {% else %}
+                                                <input type="number" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                   class="d-none input-field discount"  step="any" >
+                                                {% if form_field_val %}
+                                                    <span class="span-field">{{ form_field_val }}</span>
+                                                {% else %}
+                                                    <span class="span-field">.........</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'discounted_amount' %}
+                                            <span class="discounted_amount-content">{{ order.discount_payment }}</span>
+                                        {% elif form_field.field_type == 'remainder' %}
+                                                <span class="remainder-content">{{ order.remainder }}</span>
+                                        {% elif form_field.field_type == 'checkbox' %}
+                                            {% if blocking_field %}
+                                                <span>&#10003;</span>
+                                            {% else %}
+                                                <input type="checkbox" name="{{ form_field.name }}" class="form-check-input checkbox-field"
+                                                       data-sorting="{{ form_field.sorting }}"
+                                                       data-color="{{ form_field.color }}"
+                                                       {% if order.extra_data|is_checked:form_field.name %} checked {% endif %}>
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'payment_confirmation' %}
+                                            {% if blocking_field %}
+                                                <span>&#10003;</span>
+                                            {% else %}
+                                                <input type="checkbox" name="{{ form_field.name }}" class="form-check-input checkbox-field"
+                                                       data-sorting="{{ form_field.sorting }}"
+                                                       data-color="{{ form_field.color }}"
+                                                       {% if order.extra_data|is_checked:form_field.name %} checked {% endif %}>
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'date' %}
+                                            <input type="date" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                   class="d-none date-field">
+                                            {% if form_field_val %}
+                                                <span class="span-field">{{ form_field_val|format_date:"%d.%m.%Y" }}</span>
+                                            {% else %}
+                                                <span class="span-field">.........</span>
+                                            {% endif %}
+                                        {% elif form_field.field_type == 'payment_method' %}
+                                            {% with form_field_val=form_field_val|default:"" %}
+                                                {% get_item order.extra_data form_field.associated_field.name as associated_form_field_val %}
+                                                {% from_json form_field_val as form_field_val_json %}
+                                                {% from_json associated_form_field_val as associated_form_field_val_json %}
+                                                {% if blocking_field %}
+                                                    {{ form_field_val_json.label }}
+                                                {% else %}
+                                                    <span class="span-select-id-field" data-id="#id_{{ form_field.name }}"
+                                                          data-val="{{ form_field_val_json.id }}"
+                                                          data-associated="{{ associated_form_field_val_json.id }}"
+
+                                                    >
+                                                        {{ form_field_val_json.label }}
+                                                    </span>
+                                                    <div class="d-none">
+                                                        <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none payment_method"
+                                                                {% if blocking_field %} disabled {% endif %}
+                                                                data-bank="{{ form_field.associated_field.name }}"
+                                                                data-id="#id_{{ form_field.name }}"
+                                                        >
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% elif form_field.field_type == 'bank' %}
+                                            {% with form_field_val=form_field_val|default:"" %}
+                                                {% from_json form_field_val as form_field_val_json %}
+                                                {% if blocking_field %}
+                                                    {{ form_field_val_json.label }}
+                                                {% else %}
+                                                    <span class="span-select-id-field" data-id="#id_{{ form_field.name }}" data-val="{{ form_field_val_json.id }}">
+                                                        {{ form_field_val_json.label }}
+                                                    </span>
+                                                    <div class="d-none">
+                                                        <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none selected-bank"
+                                                                {% if blocking_field %} disabled {% endif %}
+                                                                aria-label="Select option for {{ form_field.name }}">
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% elif form_field.field_type == 'select' %}
+                                            {% with form_field_val=form_field_val|default:"........." %}
+                                                {% if not form_field|has_full_permission:user_type or blocking_field %}
+                                                    {{ form_field_val }}
+                                                {% else %}
+                                                    <span class="span-select-field" data-id="#id_{{ form_field.name }}"
+                                                        data-val="{{ form_field_val }}">
+                                                        {{ form_field_val }}
+                                                    </span>
+                                                    <div class="d-none">
+                                                        <select name="{{ form_field.name }}" style="width: 100%" class="select-field border-none select2"
+                                                                {% if blocking_field %} disabled {% endif %}>
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% elif form_field.field_type == 'datalist' %}
+                                            {% if blocking_field %}
+                                                {{ form_field_val }}
+                                            {% else %}
+                                                <input type="text" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                    class="d-none input-field" list="data_list_{{ order.id }}" autocomplete="off">
+                                                <datalist id="data_list_{{ order.id }}">
+                                                    {% for choice in form_field.choices %}
+                                                        <option value="{{ choice }}">
+                                                    {% endfor %}
+                                                </datalist>
+                                                {% if form_field_val %}
+                                                    <span class="span-field">{{ form_field_val }}</span>
+                                                {% else %}
+                                                    <span class="span-field">.........</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% else %}
+                                            {% if blocking_field %}
+                                                {{ form_field_val }}
+                                            {% else %}
+                                                <input type="text" name="{{ form_field.name }}" value="{{ form_field_val }}"
+                                                    class="d-none input-field">
+                                                {% if form_field_val %}
+                                                    <span class="span-field">{{ form_field_val }}</span>
+                                                {% else %}
+                                                    <span class="span-field">.........</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                 </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+                <tfoot class="{% if not request.user.allowed_add %} d-none {% endif %}">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <tr>
+                            <td  class="text-center">
+                               <button aria-label="Add New Row" class="jSheetAddColumn jSheetAddRow js-addRow">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 mr-1.5 shrink-0"><path fill-rule="evenodd" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1 1 5.925 1 12s4.925 11 11 11Zm0-16a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H8a1 1 0 1 1 0-2h3V8a1 1 0 0 1 1-1Z" clip-rule="evenodd"></path></svg></button>
+                            </td>
+                            {% for form_field in form_fields %}
+                                <td class="px-6 {{ form_field.classes }}" data-label="{{ form_field.label }}" style="{{ form_field.styles }}">
+                                    {% include 'dynamic_forms/include/form_field_generate.html' %}
+                                </td>
+                            {% endfor %}
+                            
+                        </tr>
+                    </form>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block modal %}
+<div class="modal fade" id="orderCreateModal" tabindex="-1" aria-labelledby="orderCreateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderCreateModalLabel">Добавить заказ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row g-3">
+              {% for form_field in form_fields %}
+              <div class="col-12">
+                <label class="form-label">{{ form_field.label|safe }}</label>
+                {% include 'dynamic_forms/include/form_field_generate.html' %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-success">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+ </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/excel-table.js' %}"></script>
+{% endblock %}
+ 
+{% endblock %}

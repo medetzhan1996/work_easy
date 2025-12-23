@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load sales_funnel_tags %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+  <div class="d-flex card-section" id="kanban-container">
+    {% for funnel in funnels %}
+    {% custom_cycle forloop.counter0  as color_cycle %}
+      <div class="card-main" >
+        <div class="card">
+          <!-- Card header START -->
+          <div class="card-header pb-0 border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title mt-2 mb-0">{{ funnel.title }}</h5>
+              <button class="btn btn-link open-card-modal add-card-btn p-0" data-url="{% url 'sales_funnel:card_create' %}" data-funnel="{{ funnel.id }}" title="Добавить карточку">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M10 6V14M6 10H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <!-- Card header END -->
+          <!-- Card body START -->
+          <div id="{{ funnel.id }}" class="kanban-items tasks card-body body-section" >
+            {% for card in funnel.card_set.all %}
+              <div data-url="{% url 'sales_funnel:card_update' pk=card.id %}"
+                   data-card_order_url="{% url 'orders:card_order_list' object_id=card.id %}"
+                   data-id="{{ card.id }}" class="bg-light mb-2 p-3 rounded kanban-item cursor-grab open-card-modal border-card {{ color_cycle }}">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-1">Клиент: {{ card.customer }} </h6>
+                </div>
+                <p class="small mb-0">{{ card.customer.full_name }}</p>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Card body END -->
+          <div class="card-footer">
+              <div class="d-grid">
+              <a class="btn btn-sm btn-primary open-card-modal" data-url="{% url 'sales_funnel:card_create' %}" data-funnel="{{ funnel.id }}" >+ Добавить карточку</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block modal %}
+
+    <div class="modal fade" id="universalModal" tabindex="-1" aria-labelledby="universalModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="universalModalLabel">Карточка</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <div id="id-form-content"></div>
+            <div id="id-order-form-content" class="d-none">
+              test...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

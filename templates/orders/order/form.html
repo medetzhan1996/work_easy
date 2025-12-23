@@ -1,0 +1,12 @@
+<form id="id-order-form" action="{% url 'orders:order_card_form' pk=card_id %}" method="post"
+      data-card_order_url="{% url 'orders:card_order_list' object_id=card_id %}">
+    {% csrf_token %}
+    {% for form_field in form_fields %}
+        <div>
+            <label for="">{{ form_field.label|safe }}</label><br>
+            {% include 'dynamic_forms/include/form_field_generate.html' %}<br>
+       </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-success" value="Сохранить">
+    <button id="id-back-funnel">Назад</button>
+</form>

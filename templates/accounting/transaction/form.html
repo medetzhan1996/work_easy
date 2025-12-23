@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load accounting_tags %}
+{% load account_tags %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/accounting-responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb p-2">
+            <li class="breadcrumb-item"><a href="{% url 'accounting:transaction_list' %}">Финансовые операции</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Приход товара</li>
+        </ol>
+    </nav>
+</div>
+<div class="row">
+    <div class="col-12 col-md-8 formset">
+        <div class="card card-dashboard-one">
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.content_type|add_class:"d-none" }}
+
+                {{ transaction_detail_formset.management_form }}
+                <div class="card-body mt-2">
+                    <div class="row">
+                        <div class="col-12 col-md-4 mb-3">
+                            <label class="label-title">Вид операции:</label>
+                            {{ form.operation_method|add_class:"form-control" }}
+                        </div>
+                        {% if related_object|class_name == 'salary' %}
+                            <div class="col-12 col-md-4 mb-3">
+                                <label class="label-title">Работник:</label>
+                                <div>{{ related_object.user.full_name }}</div>
+                                <div class="text-muted small">Оплачиваемая зп: {{ related_object.total_amount }} тг</div>
+                                <input type="hidden" name="object_id" value="{{ related_object.user.id }}">
+                            </div>
+                        {% elif request.GET.operation_method == 'PREPAID_EXPENSE' %}
+                            <div class="col-12 col-md-4 mb-3">
+                                <label class="label-title">Сотрудник:</label>
+                                {% user_dropdown name='object_id' user=request.user %}
+                                <input type="hidden" name="content_type" value="{{ user_ct.id }}">
+                            </div>
+                        {% endif %}
+                        <div class="col-12 col-md-4 mb-3">
+                            <label  class="label-title">Комментарий:</label>
+                            {{ form.description|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+                        <div class="flex-title">
+                            <h5 class="mb-0">Список оплат</h5>
+                        </div>
+                        <div class="flex-btn">
+                            <button type="button" class="btn btn-primary btn-sm add-inline-form">
+                                <i class="bi bi-plus-circle me-1"></i>
+                                <span class="d-none d-sm-inline">Добавить оплату</span>
+                                <span class="d-inline d-sm-none">Добавить</span>
+                            </button>
+                        </div>
+                    </div>
+
+                        <div>
+                            <div class="row mb-3 d-none d-md-flex">
+                                <div class="col-md-6">
+                                    <strong>Метод оплаты / списания</strong>
+                                </div>
+                                <div class="col-md-5">
+                                    <strong>Сумма, тг</strong>
+                                </div>
+                                <div class="col-md-1">
+                                    <strong>+ / -</strong>
+                                </div>
+                            </div>
+                            <div class="formset-forms">
+                                {% for formset_form in transaction_detail_formset %}
+                                    <div class="formset-form row mb-3">
+                                        <div class="col-12 col-md-6 mb-2 mb-md-0">
+                                            <label class="label-title d-md-none">Метод оплаты / списания:</label>
+                                            {{ formset_form.id }}
+                                            {{ formset_form.payment_method|add_class:"form-control" }}
+                                        </div>
+                                        <div class="col-12 col-md-5 mb-2 mb-md-0">
+                                            <label class="label-title d-md-none">Сумма, тг:</label>
+                                            {{ formset_form.price|add_class:"form-control" }}
+                                        </div>
+                                        <div class="col-12 col-md-1 delete-content">
+                                            {{formset_form.DELETE}}
+                                            <label class="form-check-label d-md-none ms-2" for="{{ formset_form.DELETE.id_for_label }}">Удалить</label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="empty-form d-none row mb-3">
+                            <div class="col-12 col-md-6 mb-2 mb-md-0">
+                                <label class="label-title d-md-none">Метод оплаты / списания:</label>
+                                {{transaction_detail_formset.empty_form.payment_method|add_class:"form-control"}}
+                            </div>
+                            <div class="col-12 col-md-5 mb-2 mb-md-0">
+                                <label class="label-title d-md-none">Сумма, тг:</label>
+                                {{transaction_detail_formset.empty_form.price|add_class:"form-control"}}
+                            </div>
+                            <div class="col-12 col-md-1 delete-content">
+                                {{transaction_detail_formset.empty_form.DELETE}}
+                            </div>
+                        </div>
+                        <div class="modal-footer fotter-btn pb-3 pt-4">
+                            <a href="{% url 'accounting:transaction_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Сохранить
+                            </button>
+                        </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load work_time_tags %}
+
+{% block content %}
+<div class="container-fluid mb-1 pt-2">
+  <div class="border-0 mb-2">
+    <div class="card-header py-1 no-bg bg-transparent header-tabs">
+      <div>
+        <h4 class="fw-bold mb-0">Доходность соотрудников</h4>
+      </div>
+      <form action="" method="get">
+        <div class="input-group">
+            с: <input type="date" name="start_date" id="id_start_date"
+                   value="{{ start_date|date:'Y-m-d' }}" class="change-submitted clearable">
+        </div>
+        <div class="input-group">
+            по: <input type="date" name="end_date" id="id_end_date"
+                   value="{{ end_date|date:'Y-m-d' }}" class="change-submitted clearable">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="white">
+    {% for department in departments %}
+        <div class="card mb-3">
+
+            <div class="card-body">
+
+              <div class="mb-2 row">
+                <label for="staticEmail" class="col-sm-2 col-form-label"><b>{{ department.title }}</b></label>
+                <div class="col-sm-10">
+                    <span>{{ department.title }}</span>
+                </div>
+              </div>
+
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

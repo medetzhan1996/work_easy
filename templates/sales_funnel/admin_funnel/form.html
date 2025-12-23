@@ -1,0 +1,21 @@
+{% load widget_tweaks %}
+
+<form action="{{ request.path }}" method="POST" class="row g-4">
+    {% csrf_token %}
+
+   <div class="col-12">
+        <label for="id_title" class="form-label">Название</label>
+        {{ form.title|add_class:"form-control" }}
+    </div>
+
+    <div class="col-12">
+        <label for="id_company" class="form-label">Компания</label>
+        {{ form.company|add_class:"form-control" }}
+    </div>
+
+    <div class="card-footer p-1 mt-3 text-end border-0">
+      <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Выйти</button>
+        <button type="submit" class="btn btn-sm btn-primary mb-0">Сохранить</button>
+    </div>
+
+</form>

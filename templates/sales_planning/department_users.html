@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mb-1 pt-2">
+  <div class="border-0 mb-2">
+    <div class="card-header py-1 no-bg bg-transparent header-tabs">
+      <div>
+        <h4 class="fw-bold mb-0"> Планирование продаж</h4>
+      </div>
+      <form action="" class="myForm" method="get" id="myForm">
+        <div>
+            <select name="period" id="id_period" class="form-select change-clearable-submitted">
+                <option value="year" {% if selected_period == 'year' %} selected {% endif %}>На год</option>
+                <option value="month" {% if selected_period == 'month' %} selected {% endif %}>За месяц</option>
+                <option value="range" {% if selected_period == 'range' %} selected {% endif %}>За период</option>
+            </select>
+        </div>
+
+        {% if selected_period == 'month' %}
+        <div class="input-group">
+            <input type="month" name="period_val" value="{{ start_date|date:'Y-m' }}" class="form-control change-submitted clearable">
+            <button class="btn btn-primary" type="button" style="border-radius: 0;height: 34px;">
+                <i class="bi bi-funnel"></i>
+            </button>
+            <input type="hidden" id="id_start_date" value="{{ start_date|date:'Y-m-d' }}"
+                   class="clearable">
+            <input type="hidden" id="id_end_date" value="{{ end_date|date:'Y-m-d' }}"
+                class="clearable">
+        </div>
+        {% elif selected_period == 'range' %}
+        <div class="input-group">
+            <input type="date" name="start_date" id="id_start_date"
+                   value="{{ start_date|date:'Y-m-d' }}" class="change-submitted clearable">
+            <button class="btn btn-primary" type="button" style="border-radius: 0;height: 34px;">
+                <i class="bi bi-funnel"></i>
+            </button>
+        </div>
+        <div class="input-group">
+            <input type="date" name="end_date" id="id_end_date"
+                   value="{{ end_date|date:'Y-m-d' }}" class="change-submitted clearable">
+            <button class="btn btn-primary" type="button" style="border-radius: 0;height: 34px;">
+                <i class="bi bi-funnel"></i>
+            </button>
+        </div>
+        {% elif selected_period == 'year' %}
+        <div class="input-group">
+            <select name="period_val" class="change-submitted change-submitted clearable">
+                <option value="2023" {% if start_date|date:'Y' == '2023' %} selected {% endif %}>2023</option>
+                <option value="2024" {% if start_date|date:'Y' == '2024' %} selected {% endif %}>2024</option>
+            </select>
+             <button class="btn btn-primary" type="button" style="border-radius: 0;height: 34px;">
+                <i class="bi bi-funnel"></i>
+            </button>
+        </div>
+            <input type="hidden" id="id_start_date" value="{{ start_date|date:'Y-m-d' }}"
+                       class="clearable">
+            <input type="hidden" id="id_end_date" value="{{ end_date|date:'Y-m-d' }}"
+                class="clearable">
+        {% endif %}
+
+      </form>
+    </div>
+  </div>
+</div>
+<div class="white">
+    {% for department, users in users_by_department.items %}
+        <div class="card mb-3">
+            <!-- <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                <h6 class="m-0 fw-bold">{{ department.title }}</h6>
+            </div> -->
+            <div class="card-body">
+
+              <div class="mb-2 row">
+                <label for="staticEmail" class="col-sm-2 col-form-label"><b>{{ department.title }}</b></label>
+                <div class="col-sm-10">
+                    <input type="text" data-object_id="{{ department.id }}"data-content_type="{{ department_ct.id }}"
+                           value="{{ department.sales_plan }}" class="form-control sales-planning-form">
+                </div>
+              </div>
+                <!-- <div class="reset-block">
+                    <div class="filter-title">
+                        <h6 class="fw-bold">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCписок сотрудников</h6>
+                    </div>
+                </div> -->
+               {% for user in users %}
+                  <div class="mb-2 row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">
+                        -- {{ user.username }}
+                    </label>
+                    <div class="col-sm-10">
+                        <input type="text" data-object_id="{{ user.id }}" data-content_type="{{ user_ct.id }}"
+                                   value="{{ user.sales_plan }}" class="form-control sales-planning-form">
+                    </div>
+                  </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    {% endfor %}
+  </div>
+
+   <!--  <ul>
+        {% for department, users in users_by_department.items %}
+            <li>
+                <h2>
+                    {{ department.title }}
+                    <input type="text" data-object_id="{{ department.id }}"data-content_type="{{ department_ct.id }}"
+                           value="{{ department.sales_plan }}" class="sales-planning-form">
+                </h2>
+                <ul>
+                    {% for user in users %}
+                        <li>
+                            {{ user.username }}
+                            <input type="text" data-object_id="{{ user.id }}" data-content_type="{{ user_ct.id }}"
+                                   value="{{ user.sales_plan }}" class="sales-planning-form">
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul> -->
+
+    {% if selected_periods %}
+        <div>
+            <h3>Выбранные премежуток дат</h3>
+            {% for selected_period in selected_periods %}
+                <p>
+                    <a href="{% url 'sales_planning:department_users' %}?period=range&start_date={{  selected_period.start_date|date:'Y-m-d' }}&end_date={{ selected_period.end_date|date:'Y-m-d' }}">
+                        {{ selected_period.start_date }} - {{ selected_period.end_date }}
+                    </a>
+                    <a href="">Удалить</a>
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,214 @@
+/* Modal Responsive Styles for Sales Funnel */
+
+/* Fixed header */
+header.header-static {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    background: #fff;
+}
+
+/* Add padding to body to compensate for fixed header */
+body {
+    padding-top: 70px;
+}
+
+/* Adjust main content */
+main {
+    min-height: calc(100vh - 70px);
+}
+
+/* Add card button styles */
+.add-card-btn {
+    color: #6c757d;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem !important;
+}
+
+.add-card-btn:hover {
+    opacity: 1;
+    color: #0d6efd;
+    transform: scale(1.1);
+    text-decoration: none;
+}
+
+.add-card-btn:active {
+    transform: scale(0.95);
+}
+
+.add-card-btn svg {
+    display: block;
+}
+
+/* Desktop - default */
+.modal-confirm {
+    max-width: 600px;
+}
+
+/* Tablets */
+@media (max-width: 991px) {
+    .modal-confirm {
+        max-width: 90%;
+        margin: 1rem auto;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 767px) {
+    /* Hide profile dropdown on mobile - use menu logout instead */
+    header .nav.flex-nowrap {
+        display: none !important;
+    }
+
+    /* Hide footer buttons on mobile - use header button instead */
+    .card-footer {
+        display: none !important;
+    }
+
+    /* Make sure kanban container doesn't need extra padding */
+    .card-section {
+        padding-bottom: 1rem;
+    }
+
+    /* Adjust header button for mobile */
+    .add-card-btn {
+        padding: 0.5rem !important;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .add-card-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Make card title smaller on mobile if needed */
+    .card-title {
+        font-size: 0.9375rem;
+        flex: 1;
+        margin-right: 0.5rem;
+    }
+
+    /* Modal adjustments */
+    .modal-confirm {
+        max-width: 95%;
+        margin: 0.5rem;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-content {
+        border-radius: 0.5rem;
+    }
+
+    .modal-header {
+        padding: 1rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+
+    .modal-footer {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Form adjustments */
+    .form-label {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .form-control, .form-select {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.75rem;
+        height: auto;
+        min-height: 44px;
+    }
+
+    textarea.form-control {
+        min-height: 80px;
+    }
+
+    .col-12.mb-2 {
+        margin-bottom: 0.75rem !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 575px) {
+    .modal-confirm {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .modal-dialog {
+        margin: 0;
+        max-width: 100%;
+    }
+
+    .modal-content {
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+    }
+
+    .modal-header {
+        padding: 0.75rem 1rem;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 1;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .modal-body {
+        padding: 1rem;
+        max-height: none;
+        flex: 1;
+    }
+
+    .modal-footer {
+        padding: 0.75rem 1rem;
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .modal-footer .btn {
+        font-size: 0.9375rem;
+        padding: 0.625rem 1rem;
+        min-height: 44px;
+    }
+}
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+    }
+
+    .form-control, .form-select, input, textarea, select {
+        font-size: 16px !important;
+    }
+}
+

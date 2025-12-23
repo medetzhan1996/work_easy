@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	{% load account_filters %}
+	<title></title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+	<link
+	  rel="stylesheet"
+	  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+	  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+	  crossorigin="anonymous"
+	  referrerpolicy="no-referrer"
+	/>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css" />
+	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/modal-responsive.css' %}">
+<!-- 	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/mobile.table.css' %}"> -->
+	{% block extra_css %}{% endblock %}
+
+</head>
+<body>
+<header class="navbar-light header-static bg-mode">
+	<nav class="navbar navbar-expand-lg bg-white">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="#">
+	    	<img src="{% static 'assets/img/NO.png' %}" class="logo">
+	    </a>
+	    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+	      <ul class="navbar-nav navbar-nav-scroll ms-auto">
+			{% if user|has_perm:'sales_funnel.view_card' %}
+				<li class="nav-item">
+					<a href="{% url 'sales_funnel:card_list' %}" class="nav-link">
+						Воронка
+					</a>
+				</li>
+			{% endif %}
+			{% if user|has_perm:'orders.view_order' %}
+				<li class="nav-item">
+					<a href="{% url 'orders:order_list' %}" class="nav-link" >
+						Заказы
+					</a>
+				</li>
+			{% endif %}
+			{% if user|has_perm:'accounting.view_transaction' %}
+			  	<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="homeMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Бухгалтерия</a>
+						<ul class="dropdown-menu" aria-labelledby="homeMenu">
+							<li> <a class="dropdown-item" href="{% url 'accounting:transaction_list' %}"> Финансовые операции</a></li>
+							<li> <a class="dropdown-item" href="{% url 'orders:order_sales_list' %}"> Оптовики</a></li>
+							<li> <a class="dropdown-item" href="{% url 'payroll:salary_list' %}">Учет зарплаты</a></li>
+							<li> <a class="dropdown-item" href="{% url 'payroll:penalty_list' %}">Штрафы</a></li>
+						</ul>
+				</li>
+			{% endif %}
+		  	{% if user|has_perm:'work_time.view_worktime' %}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="gravikMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">График работы</a>
+					<ul class="dropdown-menu" aria-labelledby="gravikMenu">
+						<li> <a class="dropdown-item" href="{% url 'work_time:week_work_time' %}"> График работы сотрудников</a></li>
+						<li> <a class="dropdown-item" href="{% url 'work_time:attendance' %}">Учет посещаемости</a></li>
+					</ul>
+				</li>
+			{% endif %}
+			{% if user|has_perm:'warehouse.view_storageoperation' %}
+				<li class="nav-item">
+					<a href="{% url 'warehouse:storage_operation_list' %}" class="nav-link" >
+						Склад
+					</a>
+				</li>
+			{% endif %}
+			{% if user|has_perm:'sales_planning.view_salesplan' %}
+			  	<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="settinngMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Настройка</a>
+						<ul class="dropdown-menu" aria-labelledby="settinngMenu">
+							<li> <a class="dropdown-item" href="{% url 'sales_planning:department_users' %}"> Планирование продаж</a></li>
+						</ul>
+				</li>
+			{% endif %}
+			{% if user|has_perm:'account.view_user' %}
+			  	<li class="nav-item">
+						<a class="nav-link" href="#" id="reportMenu">Отчет (скоро)</a>
+				</li>
+			{% endif %}
+			<li class="nav-item d-lg-none">
+				<a class="nav-link text-danger" href="{% url 'logout' %}?next=/login/">
+					<i class="bi bi-power me-2"></i>Выйти
+				</a>
+			</li>
+<!--			<li class="nav-item">-->
+<!--				<a href="{% url 'dynamic_forms:admin_form_field_list' %}" class="nav-link" >-->
+<!--					Настройка формы-->
+<!--				</a>-->
+<!--			</li>-->
+<!--			<li class="nav-item">-->
+<!--	         	<a href="{% url 'sales_funnel:admin_funnel_list' %}" class="nav-link" >-->
+<!--					Настройка воронки-->
+<!--				</a>-->
+<!--	        </li>-->
+	      </ul>
+	    </div>
+	    <ul class="nav flex-nowrap align-items-center ms-sm-3 list-unstyled">
+<!--			<li class="nav-item ms-2">-->
+<!--				<a class="nav-link icon-md btn btn-light p-0" href="messaging.html">-->
+<!--					<i class="bi bi-chat-left-text-fill fs-6"> </i>-->
+<!--				</a>-->
+<!--			</li>-->
+			
+			
+			<!-- Notification dropdown END -->
+
+			<li class="nav-item ms-2 dropdown">
+				<a class="nav-link btn icon-md p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
+					<img class="avatar-img rounded-2" src="{% static 'assets/img/07.jpg' %}" alt="">
+				</a>
+				<ul class="dropdown-menu dropdown-animation dropdown-menu-end pt-3 small me-md-n3" aria-labelledby="profileDropdown" style="width: 250px;right: 10px">
+					<!-- Profile info -->
+					<li class="px-3">
+						<div class="d-flex align-items-center position-relative">
+							<!-- Avatar -->
+							<div class="avatar me-3">
+								<img class="avatar-img rounded-circle" src="{% static 'assets/img/07.jpg' %}" alt="avatar">
+							</div>
+							<div>
+								<a class="h6 stretched-link" href="#">{{ request.user }}</a>
+								<p class="small m-0">{{ request.user.get_user_type_display }}</p>
+							</div>
+						</div>
+<!--						<a class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center" href="my-profile.html">View profile</a>-->
+					</li>
+					<!-- Links -->
+<!--					<li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear fa-fw me-2"></i>Settings &amp; Privacy</a></li>-->
+<!--					<li> -->
+<!--						<a class="dropdown-item" href="https://support.webestica.com/" target="_blank">-->
+<!--							<i class="fa-fw bi bi-life-preserver me-2"></i>Support-->
+<!--						</a> -->
+<!--					</li>-->
+					<li class="dropdown-divider"></li>
+					<li>
+						<a class="dropdown-item bg-danger-soft-hover" href="{% url 'logout' %}?next=/login/">
+							<i class="bi bi-power fa-fw me-2"></i>
+							Выйти
+						</a>
+					</li>
+				</ul>
+			</li>
+			<!-- Profile START -->
+			
+		</ul>
+	  </div>
+	</nav>
+	<!-- Logo Nav START -->
+	
+</header>
+
+<main>
+	<div class="">
+		{% block content %}{% endblock %}
+		{% block modal %}{% endblock %}
+	</div>
+</main>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+ --><script src="{% static 'dist/main.js' %}"></script>
+<script type="text/javascript">
+	document.getElementById('showMonthPicker').addEventListener('click', function() {
+    // При клике на кнопку, сначала фокусируемся на поле ввода, затем вызываем клик на нем
+    var monthInput = document.querySelector('.change-submitted');
+    monthInput.focus();
+    var event = new MouseEvent('click', {
+        'view': window,
+        'bubbles': true,
+        'cancelable': true
+    });
+    monthInput.dispatchEvent(event);
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

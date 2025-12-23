@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load accounting_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/accounting-responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mb-1 pt-2">
+  <div class="">
+    <div class="carusel_price">
+      <div class="carusel_item">
+          <div class="alert-success alert mb-0 p-l">
+            <div class="d-flex align-items-center">
+                <div class="avatar rounded no-thumbnail bg-success text-light">
+                  <i class="bi bi-credit-card-2-back"></i>
+                </div>
+                <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Общая сумма: {{ total_sum }} тг</div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      {% for payment_method in payment_methods %}
+          <div class="carusel_item">
+              <div class="alert-success alert mb-0 p-l">
+                  <div class="d-flex align-items-center">
+                      <div class="avatar rounded no-thumbnail bg-success text-light">
+                        <i class="bi bi-credit-card-2-back"></i>
+                      </div>
+                      <div class="flex-fill ms-3 text-truncate">
+                          <div class="h6 mb-0">{{ payment_method.title }}: {% get_payment_methods_sum payment_methods=payment_method.get_child_payment_methods %} тг</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        {% endfor %}
+    </div>
+  </div>
+  
+</div>
+<div class="white">
+    <div class="container-fluid mb-1 pt-2">
+      <div class="border-0 mb-2">
+        <div class="card-header py-2 no-bg bg-transparent header-tabs">
+          <div>
+            <h4 class="fw-bold mb-0">Финансовые операции</h4>
+          </div>
+          <form action="" class="myForm" method="get" id="myForm">
+            <div class="input-group">
+              {{ transactions_filter.form.created_at__gte|add_class:"form-control form-select change-submitted"|attr:"type:date"|attr:"placeholder:Дата от" }}
+            </div>
+            <div class="input-group">
+              {{ transactions_filter.form.created_at__lte|add_class:"form-control form-select change-submitted"|attr:"type:date"|attr:"placeholder:Дата до" }}
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle filters-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-plus-circle me-1"></i>
+                  <span class="d-none d-sm-inline">Финансовые операции</span>
+                  <span class="d-inline d-sm-none">Добавить</span>
+              </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=PURCHASE_MATERIAL">
+                            <i class="bi bi-cart me-2"></i>Закупка материалов
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=STAFF_SALARY">
+                            <i class="bi bi-wallet2 me-2"></i>Зарплата персонала
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=TAXES_FEES">
+                            <i class="bi bi-file-text me-2"></i>Налоги и сборы
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=SALE_GOOD">
+                            <i class="bi bi-bag-check me-2"></i>Продажа товара
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=OTHER_INCOME">
+                            <i class="bi bi-arrow-down-circle me-2"></i>Прочие расходы
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=OTHER_EXPENSES">
+                            <i class="bi bi-arrow-up-circle me-2"></i>Прочие доходы
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_create' %}?operation_method=PREPAID_EXPENSE">
+                            <i class="bi bi-cash me-2"></i>Аванс
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'accounting:transaction_move_create' %}">
+                            <i class="bi bi-arrow-left-right me-2"></i>Перевод
+                        </a>
+                    </li>
+                </ul>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="table-scroll" class="table-scroll accountant-table">
+        <table id="main-table" class="main-table table-sm table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Вид операции</th>
+                    <th>Вид оплаты</th>
+                    <th>Комментарий</th>
+                    <th>Автор</th>
+                    <th>Сумма</th>
+                    <th>Остаток в кассе</th>
+                    <th>Номер заказа</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions_filter.qs %}
+                    <tr>
+                        <td>
+                            {% if transaction.content_type.model == 'transactionmove' %}
+                                <a href="{% url 'accounting:transaction_move_update' pk=transaction.item.id %}">
+                            {% else %}
+                                <a href="{% url 'accounting:transaction_update' pk=transaction.id %}">
+                            {% endif %}
+                                {{ transaction.created_at }}
+                                </a>
+                        </td>
+                        <td>{{ transaction.get_operation_method_display }}</td>
+                        <td>
+                            {% for transaction_detail in transaction.transaction_details.all %}
+                                {{ transaction_detail.payment_method }} / {{ transaction_detail.price }} тг <br>
+                            {% endfor %}
+                        </td>
+                        <td>{{ transaction.description }}</td>
+                        <td>{{ transaction.user.last_name }} {{ transaction.user.first_name }}</td>
+                        <td>{{ transaction.price }} тг</td>
+                        <td></td>
+                        <td>{{ transaction.item.id }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+    
+{% endblock %}

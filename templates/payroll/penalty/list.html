@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load payroll_tags %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/payroll-responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mb-1 pt-2">
+  <div class="border-0 mb-2">
+    <div class="card-header py-1 no-bg bg-transparent header-tabs">
+      <div>
+        <h4 class="fw-bold mb-0">Штрафы сотрудников</h4>
+      </div>
+      <div>
+         <a  class="btn btn-success  rounded-0"  href="{% url 'payroll:penalty_create' %}">+ Добавить</a>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="white">
+    <div class="filter-2">
+      <form action="{% url 'payroll:penalty_list' %}" method="GET">
+        <div class="input-group">
+          <input type="text" class="form-control" name="user" placeholder="поиск по работникам">
+          <button class="btn btn-primary" type="submit" style="border-radius: 0;height: 34px;">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+      <div>
+        <div class="input-group">
+          <input type="month" class="form-control">
+          <button class="btn btn-primary" type="button" style="border-radius: 0;height: 34px;">
+            <i class="bi bi-funnel"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="table-scroll" class="table-scroll mt-2">
+      <table id="main-table" class="main-table table-sm table">
+        <thead>
+          <tr> 
+            <th scope="col" class="resize-handle">
+              Работник
+            </th>
+            <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+             Дата
+            </th>
+            <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+             Штраф
+            </th>
+            <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+              Комментарий
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for penalty in penalties %}
+                <tr data-id="{{ salary.id }}">
+                    <td style="color:black;">
+                        {{ penalty.user }}
+                    </td>
+                    <td>
+                        {{ penalty.date }}
+                    </td>
+                    <td>
+                        {{ penalty.penalty }}
+                    </td>
+                    <td>
+                        {{ penalty.comment }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+{% endblock %}
+

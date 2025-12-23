@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/accounting-responsive.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb p-2">
+              <li class="breadcrumb-item"><a href="{% url 'accounting:transaction_list' %}">Финансовые операции</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Перевод</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="card card-dashboard-one">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="card-body mt-2">
+                            <div class="row">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label class="label-title">Из кассы:</label>
+                                    {{ form.payment_method_from|add_class:"form-control" }}
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label  class="label-title">В кассу:</label>
+                                    {{ form.payment_method_to|add_class:"form-control" }}
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label  class="label-title">Сумма:</label>
+                                    {{ form.price|add_class:"form-control" }}
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label  class="label-title">Комментарий:</label>
+                                    {{ form.description|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                         <div class="modal-footer fotter-btn pb-3 pt-3">
+                            <a href="{% url 'accounting:transaction_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-1"></i>Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>Сохранить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endblock %}

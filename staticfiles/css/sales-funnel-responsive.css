@@ -1,0 +1,331 @@
+/* Sales Funnel Responsive Styles */
+
+/* Desktop styles */
+.card-section {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  min-height: calc(100vh - 120px);
+}
+
+.card-main {
+  flex: 0 0 auto;
+  width: 320px;
+  min-width: 320px;
+}
+
+.kanban-items {
+  min-height: 200px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.kanban-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.kanban-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar styles for desktop */
+.card-section::-webkit-scrollbar {
+  height: 8px;
+}
+
+.card-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.card-section::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.card-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.kanban-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kanban-items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.kanban-items::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+/* Mobile styles - Tablets in portrait mode */
+@media (max-width: 991px) {
+  .card-section {
+    gap: 0.75rem;
+  }
+
+  .card-main {
+    width: 280px;
+    min-width: 280px;
+  }
+
+  .kanban-items {
+    max-height: calc(100vh - 320px);
+  }
+}
+
+/* Mobile styles - Phones in landscape mode */
+@media (max-width: 767px) {
+  .container-fluid.mt-3 {
+    margin-top: 0.5rem !important;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .card-section {
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .card-main {
+    width: 260px;
+    min-width: 260px;
+  }
+
+  .card-main .card {
+    margin-bottom: 0;
+  }
+
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    margin-top: 0 !important;
+  }
+
+  .kanban-items {
+    padding: 0.5rem;
+    max-height: calc(100vh - 340px);
+  }
+
+  .kanban-item {
+    padding: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .kanban-item h6 {
+    font-size: 0.875rem;
+  }
+
+  .kanban-item p {
+    font-size: 0.75rem;
+  }
+
+  .card-footer {
+    padding: 0.75rem 1rem;
+  }
+
+  .card-footer .btn {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+
+  /* Modal adjustments for mobile */
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .modal-content {
+    border-radius: 0.5rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .form-control {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+
+  .modal-footer .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile styles - Phones in portrait mode */
+@media (max-width: 575px) {
+  .container-fluid.mt-3 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .card-section {
+    gap: 0.5rem;
+  }
+
+  .card-main {
+    width: 240px;
+    min-width: 240px;
+  }
+
+  .card-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .card-title {
+    font-size: 0.875rem;
+  }
+
+  .kanban-items {
+    padding: 0.5rem;
+    max-height: calc(100vh - 350px);
+    min-height: 150px;
+  }
+
+  .kanban-item {
+    padding: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .kanban-item h6 {
+    font-size: 0.8125rem;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .kanban-item p {
+    font-size: 0.6875rem;
+  }
+
+  .card-footer {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .card-footer .btn {
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.5rem;
+  }
+
+  /* Modal full screen on small phones */
+  .modal-dialog {
+    margin: 0;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .modal-content {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .modal-body {
+    padding: 0.75rem;
+    overflow-y: auto;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+  .card-main {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .card-title {
+    font-size: 0.8125rem;
+  }
+
+  .kanban-item h6 {
+    font-size: 0.75rem;
+  }
+
+  .kanban-item p {
+    font-size: 0.625rem;
+  }
+
+  .card-footer .btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .kanban-items {
+    max-height: calc(100vh - 280px);
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  .kanban-item {
+    cursor: default;
+  }
+
+  .kanban-item:active {
+    transform: scale(0.98);
+  }
+
+  .btn {
+    min-height: 44px; /* iOS recommended touch target size */
+    min-width: 44px;
+  }
+
+  .open-card-modal {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Prevent text selection during drag on mobile */
+.gu-mirror {
+  opacity: 0.8;
+  cursor: grabbing !important;
+}
+
+.gu-transit {
+  opacity: 0.5;
+}
+
+/* Empty state styling */
+.kanban-items:empty::after {
+  content: 'Перетащите карточку сюда';
+  display: block;
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+/* Loading state */
+.card-main.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .kanban-item {
+    transition: none;
+  }
+
+  .kanban-item:hover {
+    transform: none;
+  }
+}
+

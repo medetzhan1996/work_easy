@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load work_time_tags %}
+
+{% block content %} 
+<div class="container-fluid mb-1 pt-2">
+  <div class="border-0 mb-2">
+    <div class="card-header py-1 no-bg bg-transparent header-tabs">
+      <div>
+        <h4 class="fw-bold mb-0">Учет посещаемости</h4>
+      </div>
+      <form action="" method="get">
+        <div class="input-group">
+          <input type="month" name="month" class="change-submitted form-controll" value="{% if request.GET.month %}{{ request.GET.month }}{% else %}{{ current_year }}-{{ current_month|default:'01' }}{% endif %}">
+          
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="white">
+    <div id="table-scroll" class="table-scroll mt-2">
+      <table id="main-table" class="main-table table-sm table">
+        <thead>
+          <tr>
+            <th rowspan="2" style="width:150px">Сотрудник</th>
+            {% for date in dates %}
+                <th style="width:100px;text-align: center;">{{ date.day }}</th>
+            {% endfor %}
+          </tr>
+          <tr>
+            {% for date in dates %}
+                <th style="text-align: center;">{{ date|day_of_week }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr data-user="{{ user.id }}">
+                    <td style="color:black;">{{ user.last_name }} {{ user.first_name }}</td>
+                    {% for date in dates %}
+                        {% get_week_working user_work_times user.id date.weekday as week_working %}
+                        {% get_attendance_status user_attendances user.id date as attendance_status %}
+                        <td class="popoverAttendanceTarget {{ attendance_status }}"
+                            data-date="{{ date|date:'Y-m-d' }}">
+                        </td>
+                    {% endfor %}
+                </tr>
+             {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+{% endblock %}

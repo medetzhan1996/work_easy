@@ -1,0 +1,768 @@
+/* Excel-like Table Styles */
+
+/* Toolbar for column management */
+.excel-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+}
+
+.excel-toolbar .btn {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 2px;
+}
+
+.dropdown-menu-columns {
+  max-height: 400px;
+  overflow-y: auto;
+  min-width: 250px;
+}
+
+.column-toggle-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+.column-toggle-item:hover {
+  background: #f5f5f5;
+}
+
+.column-toggle-item input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.column-toggle-item label {
+  cursor: pointer;
+  margin-bottom: 0;
+  flex: 1;
+}
+
+/* Container */
+.excel-container {
+  background: #ffffff;
+  padding: 0;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Excel Table */
+.excel-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #ffffff;
+  font-size: 11pt;
+  color: #000000;
+  table-layout: auto;
+}
+
+/* Row numbering column */
+.excel-table thead th:first-child,
+.excel-table tbody td:first-child,
+.excel-table tfoot td:first-child {
+  background: #f0f0f0;
+  color: #000000;
+  text-align: center;
+  font-weight: 400;
+  min-width: 50px;
+  max-width: 50px;
+  width: 50px;
+  border-right: 2px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  user-select: none;
+}
+
+/* Dropdown actions in first column */
+.dropdown-menu-actions {
+  position: fixed !important;
+  z-index: 99999 !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+
+/* Header cells */
+.excel-table thead th {
+  background: #f0f0f0;
+  color: #000000;
+  font-weight: 600;
+  text-align: center;
+  padding: 6px 4px;
+  border: 1px solid #d4d4d4;
+  border-top: none;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  min-width: 120px;
+}
+
+.excel-table thead th:hover {
+  background: #e5e5e5;
+}
+
+/* Excel-style header content with dropdown */
+.excel-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.excel-header-content .header-label {
+  flex: 1;
+  text-align: center;
+}
+
+.excel-header-content .header-dropdown {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Header dropdown button (chevron) */
+.header-dropdown-btn {
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  color: #666;
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.header-dropdown-btn:hover {
+  background: #d4d4d4;
+  color: #000;
+}
+
+.header-dropdown-btn i {
+  font-size: 10px;
+}
+
+/* Dropdown menu styling */
+.excel-table .dropdown-menu {
+  min-width: 220px;
+  font-size: 13px;
+  border-radius: 0;
+  border: 1px solid #d4d4d4;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+  padding: 4px 0;
+}
+
+.excel-table .dropdown-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  padding: 6px 12px;
+  margin-bottom: 4px;
+}
+
+.excel-table .dropdown-item {
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #333;
+  transition: background 0.15s;
+}
+
+.excel-table .dropdown-item:hover {
+  background: #e5e5e5;
+  color: #000;
+}
+
+.excel-table .dropdown-item i {
+  width: 16px;
+  font-size: 14px;
+}
+
+.excel-table .dropdown-divider {
+  margin: 4px 0;
+  border-color: #d4d4d4;
+}
+
+/* Data cells */
+.excel-table tbody td {
+  padding: 4px 6px;
+  border: 1px solid #d4d4d4;
+  background: #ffffff;
+  vertical-align: middle;
+  cursor: cell;
+  min-height: 21px;
+  position: relative;
+}
+
+/* Zebra striping */
+.excel-table tbody tr:nth-child(even) td:not(:first-child) {
+  background: #fafafa;
+}
+
+/* Active cell highlight */
+.excel-table tbody td:focus,
+.excel-table tbody td.active-cell {
+  outline: 2px solid #217346;
+  outline-offset: -2px;
+  z-index: 1;
+  box-shadow: inset 0 0 0 1px #217346;
+}
+
+/* Row hover */
+.excel-table tbody tr:hover td {
+  background: #f5f5f5;
+}
+
+.excel-table tbody tr:hover td:first-child {
+  background: #e0e0e0;
+}
+
+/* Input fields */
+.excel-table input[type="text"],
+.excel-table input[type="number"],
+.excel-table input[type="date"] {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  font-size: 11pt;
+  font-family: inherit;
+  color: #000000;
+  outline: none;
+}
+
+/* Select fields */
+.excel-table select,
+.excel-table .select2-container {
+  width: 100% !important;
+  border: none;
+  background: transparent;
+  font-size: 11pt;
+  font-family: inherit;
+}
+
+/* Checkbox */
+.excel-table input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+/* Span fields (display mode) */
+.excel-table .span-field,
+.excel-table .span-select-field {
+  display: inline-block;
+  width: 100%;
+  min-height: 18px;
+  padding: 2px 4px;
+  cursor: text;
+}
+
+.excel-table .span-field:hover,
+.excel-table .span-select-field:hover {
+  background: #e6f2ff;
+}
+
+/* Footer (new row) - FIXED at bottom */
+.excel-table tfoot {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: #f0f0f0;
+}
+
+.excel-table tfoot tr {
+  background: #f0f0f0;
+}
+
+.excel-table tfoot td {
+  background: #f0f0f0;
+  border: 1px solid #d4d4d4;
+  padding: 4px 6px;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.excel-table tfoot td:first-child {
+  z-index: 11;
+}
+
+/* Action buttons */
+.excel-table .action-cell {
+  text-align: center;
+  padding: 0;
+}
+
+.excel-table .action-cell .btn {
+  border: none;
+  background: transparent;
+  color: #666;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.excel-table .action-cell .btn:hover {
+  color: #000;
+  background: #e0e0e0;
+}
+
+/* Dropdown menu */
+.excel-table .dropdown-menu {
+  min-width: 150px;
+  font-size: 13px;
+  border-radius: 0;
+  border: 1px solid #d4d4d4;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Add row button */
+.jSheetAddRow {
+  background: transparent;
+  border: none;
+  color: #217346;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jSheetAddRow:hover {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.jSheetAddRow svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Scrollbar customization */
+.table-scroll::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border: 1px solid #d4d4d4;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 1px solid #a0a0a0;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+.table-scroll::-webkit-scrollbar-corner {
+  background: #f0f0f0;
+}
+
+/* Column resizing */
+.resize-handle {
+  position: relative;
+  padding-right: 20px;
+}
+
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.resize-handle:hover::after {
+  background: #217346;
+}
+
+/* Cell selection */
+.excel-table td.selected {
+  background: #cfe2f3 !important;
+}
+
+/* Row numbers */
+.excel-table tbody tr td:first-child .row-number {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Empty cell placeholder */
+.excel-table td .span-field:empty::before,
+.excel-table td .span-select-field:empty::before {
+  content: '...';
+  color: #c0c0c0;
+}
+
+/* Readonly cells */
+.excel-table td[readonly] {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Grid lines */
+.excel-table {
+  border-left: 1px solid #d4d4d4;
+  border-top: 1px solid #d4d4d4;
+}
+
+/* Freeze panes effect */
+.table-scroll {
+  position: relative;
+  overflow: auto;
+  height: 90vh;
+  border: 1px solid #d4d4d4;
+}
+
+/* Loading state */
+.excel-table.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Error state */
+.excel-table td.error {
+  background: #ffc7ce !important;
+  color: #9c0006;
+}
+
+/* Success state */
+.excel-table td.success {
+  background: #c6efce !important;
+  color: #006100;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Mobile table container */
+  .table-scroll {
+    height: 70vh;
+    border: none;
+  }
+
+  /* Smaller font for mobile */
+  .excel-table {
+    font-size: 12pt;
+  }
+  
+  /* Compact header */
+  .excel-table thead th {
+    min-width: 100px;
+    padding: 4px 2px;
+    font-size: 13px;
+  }
+
+  /* Compact cells */
+  .excel-table tbody td {
+    padding: 3px 4px;
+    font-size: 13px;
+  }
+
+  /* Hide row numbers on very small screens */
+  .excel-table thead th:first-child,
+  .excel-table tbody td:first-child,
+  .excel-table tfoot td:first-child {
+    min-width: 40px;
+    max-width: 40px;
+    width: 40px;
+    font-size: 11px;
+  }
+
+  /* Compact header content */
+  .excel-header-content {
+    gap: 2px;
+    padding: 0 2px;
+  }
+
+  .excel-header-content .header-label {
+    font-size: 13px;
+  }
+
+  /* Smaller dropdown button */
+  .header-dropdown-btn {
+    padding: 1px 2px;
+    font-size: 10px;
+  }
+
+  .header-dropdown-btn i {
+    font-size: 10px;
+  }
+
+  /* Mobile-friendly dropdown */
+  .excel-table .dropdown-menu {
+    min-width: 200px;
+    font-size: 14px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .excel-table .dropdown-item {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  /* Compact action buttons */
+  .action-cell .btn {
+    padding: 2px 4px;
+    font-size: 13px;
+  }
+
+  /* Mobile header */
+  .card-header .d-flex {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch !important;
+  }
+
+  .card-header .d-flex > div:first-child {
+    width: 100%;
+  }
+
+  .card-header h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .card-header form {
+    width: 100%;
+  }
+
+  .card-header .input-group {
+    width: 100%;
+  }
+
+  /* Column management button */
+  #columnVisibilityBtn {
+    font-size: 13px;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+
+  #columnVisibilityBtn i {
+    font-size: 11px;
+  }
+
+  /* Dropdown menu for columns */
+  .dropdown-menu-columns {
+    max-height: 300px;
+    min-width: 200px;
+    font-size: 14px;
+  }
+
+  .column-toggle-item {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .column-toggle-item label {
+    font-size: 14px;
+  }
+
+  /* Input fields */
+  .excel-table input[type="text"],
+  .excel-table input[type="number"],
+  .excel-table input[type="date"] {
+    font-size: 16px;
+    padding: 2px 3px;
+  }
+
+  /* Select fields */
+  .excel-table select {
+    font-size: 16px;
+    padding: 2px 3px;
+  }
+
+  /* Select2 text sizing on mobile to prevent zoom */
+  .excel-table .select2-container .select2-selection__rendered,
+  .excel-table .select2-container .select2-results__option,
+  .excel-table .select2-dropdown {
+    font-size: 16px;
+  }
+
+  /* Month picker in header: prevent zoom on focus */
+  .card-header .input-group input[type="month"],
+  .card-header .input-group .form-control {
+    font-size: 16px;
+  }
+
+  /* Checkbox */
+  .excel-table input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Footer (add row button) - keep fixed on mobile */
+  .excel-table tfoot {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .excel-table tfoot td {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .jSheetAddRow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .jSheetAddRow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Stats cards on mobile */
+  .alert-success, .alert-danger, .alert-info {
+    padding: 6px !important;
+  }
+
+  .alert .h6 {
+    font-size: 12px;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .avatar i {
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices (phones in portrait mode) */
+@media (max-width: 576px) {
+  .table-scroll {
+    height: 65vh;
+  }
+
+  /* Even more compact */
+  .excel-table {
+    font-size: 11pt;
+  }
+
+  .excel-table thead th {
+    min-width: 80px;
+    padding: 3px 2px;
+    font-size: 12px;
+  }
+
+  .excel-table tbody td {
+    padding: 2px 3px;
+    font-size: 12px;
+    min-height: 18px;
+  }
+
+  /* Hide row numbers completely on very small screens if needed */
+  /* Uncomment if you want to hide row numbers on very small screens
+  .excel-table thead th:first-child,
+  .excel-table tbody td:first-child,
+  .excel-table tfoot td:first-child {
+    display: none;
+  }
+  */
+
+  /* Mobile header - stack everything */
+  .card-header h4 {
+    font-size: 16px;
+  }
+
+  #columnVisibilityBtn {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+
+  /* Simplify dropdown items */
+  .dropdown-item i {
+    display: none; /* Hide icons to save space */
+  }
+
+  .column-toggle-item label {
+    font-size: 13px;
+  }
+
+  /* Container padding */
+  .container-fluid {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  /* Stats cards - stack vertically */
+  .row-cols-xl-6 {
+    row-gap: 0.5rem;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .table-scroll {
+    height: 55vh;
+  }
+
+  /* Hide stats on landscape to save space */
+  .container-fluid:has(.alert-success) {
+    display: none;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .excel-table {
+    font-size: 10.5pt;
+  }
+
+  .excel-table thead th {
+    min-width: 130px;
+    padding: 6px 3px;
+  }
+
+  .excel-table tbody td {
+    padding: 3px 5px;
+  }
+
+  .card-header h4 {
+    font-size: 18px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .excel-table {
+    border-collapse: collapse;
+  }
+  
+  .excel-table thead th,
+  .excel-table tbody td {
+    border: 1px solid #000;
+    page-break-inside: avoid;
+  }
+}
+

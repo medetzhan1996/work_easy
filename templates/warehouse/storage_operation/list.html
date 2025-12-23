@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load accounting_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<div class="white mt-3">
+    <form class="filters" >
+      <div class="filter-group-left">
+
+        <div class="input-group">
+          <span class="input-group-text filters-text">Вид операции:</span>
+           {{ storage_operations_filter.form.operation_method|add_class:"form-control change-submitted" }}
+        </div>
+        <div class="input-group">
+          <span class="input-group-text filters-text">С :</span>
+          {{ storage_operations_filter.form.created_at__gte|add_class:"form-control change-submitted"|attr:"type:date" }}
+        </div>
+        <div class="input-group">
+          <span class="input-group-text filters-text">По :</span>
+         {{ storage_operations_filter.form.created_at__lte|add_class:"form-control change-submitted"|attr:"type:date" }}
+        </div>
+      </div>
+      <div>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle filters-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Складские операции
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <a class="dropdown-item" href="{% url 'warehouse:storage_operation_create' %}?operation_method=COMING">
+                        Приход товара
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{% url 'warehouse:storage_operation_create' %}?operation_method=WRITE_OFF">
+                        Списание товара
+                    </a>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </form>
+    <div id="table-scroll" class="table-scroll accountant-table">
+        <table id="main-table" class="main-table table-sm table">
+            <thead>
+                <tr>
+                    <th style="width:250px">Дата</th>
+                    <th>Тип операции</th>
+                    <th>Склад</th>
+                    <th>Комментарий</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for storage_operation in storage_operations_filter.qs %}
+                    <tr>
+                        <td>
+                            {{ storage_operation.created_at }}
+                        </td>
+                        <td>{{ storage_operation.get_operation_method_display }}</td>
+                        <td>{{ storage_operation.storage.title }}</td>
+                        <td>{{ storage_operation.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

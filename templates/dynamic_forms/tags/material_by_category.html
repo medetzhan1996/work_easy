@@ -1,0 +1,6 @@
+<select name="{{ form_field.name }}"  class="js-selectize select-field border-none">
+    <option value="">------------</option>
+    {% for material in materials %}
+        <option value="{{ material.id }}" {% if material.id == form_field_val %} selected {% endif %}>{{ material.title }}</option>
+    {% endfor %}
+</select>

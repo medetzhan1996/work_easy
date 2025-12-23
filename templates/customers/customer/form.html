@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+<div class="col-12 mb-2">
+    <label for="id_full_name" class="form-label">ФИО клиента</label>
+    {{ customer_form.full_name|add_class:"form-control" }}
+</div>
+<div class="col-12 mb-2">
+    <label for="id_phone_number" class="form-label">Номер телефона</label>
+    {{ customer_form.phone_number|add_class:"form-control" }}
+</div>
+<div class="col-12 mb-2">
+    <label for="id_social_account" class="form-label">Социальный аккаунт</label>
+    {{ customer_form.social_account|add_class:"form-control" }}
+</div>

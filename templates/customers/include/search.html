@@ -1,0 +1,20 @@
+<div id="id-customer-search-content" class="{% if form.instance.customer %} d-none {% endif %}">
+    <label for="id_funnel" class="form-label">
+        Клиент
+    </label>
+    <div class="customer-search">
+        <select name="customer" class="w-100" id="id-customer" required>
+            {% if form.instance.customer %}
+                <option value="{{ form.instance.customer.id }}">{{ form.instance.customer.full_name }}</option>
+            {% endif %}
+        </select>
+        <button type="button" data-url="{% url 'customers:customer_create' %}" class="customer-form btn-plus">
+            +
+        </button>
+    </div>
+</div>
+<div id="id-customer-detail-content">
+     {% if form.instance.customer %}
+        {% include "customers/customer/detail.html" with customer=form.instance.customer %}
+     {% endif %}
+</div>

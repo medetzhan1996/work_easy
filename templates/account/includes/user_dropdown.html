@@ -1,0 +1,6 @@
+<select name="{{ name }}" class="form-control" required>
+    <option value="">&nbsp</option>
+    {% for user in users %}
+        <option value="{{ user.id }}">{{ user.full_name }}</option>
+    {% endfor %}
+</select>

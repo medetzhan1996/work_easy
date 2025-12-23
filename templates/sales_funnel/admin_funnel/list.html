@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load sales_funnel_tags %}
+{% block content %}
+  <div class="d-flex card-section kanban-funnel" id="kanban-container">
+    {% for funnel in funnels %}
+        <div class="card-main" data-funnel-id="{{ funnel.id }}">
+          <div class="card">
+            <!-- Card header START -->
+            <div class="card-header pb-0 border-0">
+              <h5 class="card-title mt-2 mb-0"> {{ funnel.title }}</h5>
+            </div>
+            <!-- Card header END -->
+            <!-- Card body START -->
+            <div id="{{ funnel.id }}" class="kanban-items tasks card-body body-section" >
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block modal %}
+    <div class="modal fade" id="universalModal" tabindex="-1" aria-labelledby="universalModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="universalModalLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div  id="id-form-content" class="grid gap-4"></div>
+            <div  id="id-customer-form-content" class="grid gap-4 hidden"></div>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+{% endblock %}

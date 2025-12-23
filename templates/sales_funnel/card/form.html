@@ -1,0 +1,39 @@
+{% load widget_tweaks %}
+
+<form id="id-card-form" action="{{ request.path }}" method="POST" class="row g-4">
+    {% csrf_token %}
+    <div class="">
+         <div class="relative">
+             {% include "customers/customer/form.html" %}
+         </div>
+      </div>
+    <div class="relative" style="margin-top:0">
+        <div class="col-12 mb-2">
+            <label for="id_funnel" class="form-label">Воронка</label>
+            {{ form.funnel|add_class:"form-control" }}
+        </div>
+        <div class="col-12 mb-2">
+            <label for="id_comment" class="form-label">Комментарий</label>
+            {{ form.comment|add_class:"form-control" }}
+        </div>
+         <div class="col-12">
+            <label for="id_notification_date" class="form-label">Дата уведомления</label>
+            {{ form.notification_date|add_class:"form-control"|attr:"type:date" }}
+        </div>
+        <!-- <div class="col-12 mb-2">
+            <label class="form-label">Информация о заказах</label>
+            <div id="order-list-content"></div>
+            <input type="submit" class="btn" name="submit_button" data-add-order="true" value="+ Добавить заказ">
+        </div>
+        {% for extra_field in extra_form %}
+            <div class="col-12 mb-2">
+                <label class="form-label">{{ extra_field.label }}</label>
+                {{ extra_field|add_class:"form-control" }}
+            </div>
+        {% endfor %} -->
+    </div>
+    <div class="modal-footer justify-content-end">
+        <button type="button" class="btn btn-secondary"data-bs-dismiss="modal">Отмена</button>
+        <input type="submit" class="btn btn-danger" name="submit_button" value="Сохранить">
+    </div>
+</form>

@@ -1,0 +1,91 @@
+{% load payroll_tags %}
+{% get_users_by_payment users_in_salary_setup SALARY_NO_PREMIUM as users %}
+<div id="table-scroll" class="table-scroll mt-2">
+  <table id="main-table" class="main-table table-sm table">
+    <thead>
+      <tr> 
+        <th scope="col" class="resize-handle">
+          Работник
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+         Оклад
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+         Бонус
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+          Коммент
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+         Штраф
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+          Пенсионка
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+         Аванс
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+          Вышла зп
+        </th>
+        <th scope="col" class="resize-handle" style="text-align: center; min-width: 150px;">
+         Полная оплата
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        {% get_value_from_dict salaries user.id as salary %}
+            <tr data-id="{{ salary.id }}">
+                <td style="color:black;">
+                    {{ user.full_name }}
+                </td>
+                <td>
+                    {{ salary.salary }}
+                </td>
+                <td>
+                    {% if salary.is_full_payment %}
+                        {{ salary.advance_bonus }}
+                    {% else %}
+                        <input type="text" class="form-control sales-update-field" name="advance_bonus" value="{{ salary.advance_bonus }}">
+                    {% endif %}
+                </td>
+                <td>
+                    {% if salary.is_full_payment %}
+                        {{ salary.comment }}
+                    {% else %}
+                        <input type="text" class="form-control sales-update-field" name="comment"
+                               value="{{ salary.comment|default_if_none:'' }}">
+                    {% endif %}
+                </td>
+                <td>
+                    {{ salary.penalty }}
+                </td>
+                <td>
+                    {% if salary.is_full_payment %}
+                        {{ salary.pension_contribution }}
+                    {% else %}
+                        <input type="text" class="form-control sales-update-field" name="pension_contribution"
+                           value="{{ salary.pension_contribution|default_if_none:'' }}">
+                    {% endif %}
+                </td>
+                <td>
+                    {{ salary.advance_payment }}
+                </td>
+                <td>
+                    {{ salary.total_amount }}
+                </td>
+                <td>
+                    {% if salary.is_full_payment %}
+                        Оплачен
+                    {% else %}
+                        <a href="{% url 'accounting:transaction_create' %}?operation_method=STAFF_SALARY&object_id={{ salary.id }}&next={{ request.path|urlencode }}&content_type={{ salary_content_type.id }}">
+                            Оплатить
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
